@@ -1,3 +1,4 @@
+import Editbox from "./_components/editbox";
 import Sidebar from "./_components/sidebar";
 
 export default function Home() {
@@ -6,7 +7,9 @@ export default function Home() {
       <div className="h-full col-span-1 p-3">
         <Sidebar />
       </div>
-      <div className="h-full col-span-3"></div>
+      <div className="h-full col-span-3 p-3">
+        <Editbox />
+      </div>
     </div>
   );
 }
