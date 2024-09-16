@@ -7,6 +7,7 @@ import TooltipWrapper from "./tooltip-wrapper";
 import ResetModal from "./modals/reset-modal";
 import PreviewForm from "./modals/preview-form-modal";
 import ViewCodeModal from "./modals/view-code-modal";
+import TextInput from "./elements/text-input/text-input";
 
 const Editbox = () => {
   // * action states
@@ -54,7 +55,9 @@ const Editbox = () => {
             </Button>
           </div>
         </nav>
-        <div className="w-full h-full border rounded-lg"></div>
+        <div className="w-full h-full border rounded-lg p-3">
+          <TextInput />
+        </div>
       </div>
       <ResetModal
         isResetingForm={isResetingForm}
