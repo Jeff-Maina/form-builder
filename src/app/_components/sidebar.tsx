@@ -11,7 +11,7 @@ const Sidebar = () => {
           return (
             <button
               key={index}
-              className="text-sm flex p-2 pl-4 border w-full rounded items-center gap-4  font-medium text-neutral-600  hover:bg-black hover:border-black  hover:text-white transition-all duration-100"
+              className="text-sm flex p-2 pl-4 border w-full rounded items-center gap-4 bg-white  font-medium text-neutral-600  hover:bg-black hover:border-black  hover:text-white transition-all duration-100"
             >
               {element.icon}
               {element.label}

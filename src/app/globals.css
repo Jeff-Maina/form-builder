@@ -96,3 +96,11 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.bg-grid {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  background-image: linear-gradient(90deg, #80808012 1px, transparent 0),
+    linear-gradient(180deg, #80808012 1px, transparent 0);
+  background-size: 24px 24px;
+}

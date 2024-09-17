@@ -18,7 +18,7 @@ const Editbox = () => {
 
   return (
     <>
-      <div className="w-full h-full pt-10 flex flex-col">
+      <div className="w-full h-full pt-10 flex flex-col bg-white">
         <nav className="w-full h-10 mb-3 flex justify-end">
           <div className="flex items-center gap-1.5">
             <TooltipWrapper label="Reset form">
