@@ -30,8 +30,10 @@ type TProperty = {
   id: string;
   type: string;
   label: string;
+  description: string;
   placeholder?: string;
   required?: boolean;
+  defaultValue?: string | number;
   isLabelHidden: boolean;
   disabled: boolean;
   className?: string;

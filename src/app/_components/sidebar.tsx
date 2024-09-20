@@ -24,6 +24,7 @@ const Sidebar = ({ addProperty }: TSidebarProps) => {
       type: value,
       label,
       isLabelHidden: false,
+      description: "This is a description message",
       disabled: false,
       placeholder: "Placeholder",
       required: true,
