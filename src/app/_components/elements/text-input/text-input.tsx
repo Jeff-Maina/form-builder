@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import * as Tabs from "@/components/ui/tabs";
 
 import { Edit, Trash } from "lucide-react";
-import React from "react";
+import * as React from "react";
 import ModelTab from "./model-tab";
 import DesignTab from "./design-tab";
 

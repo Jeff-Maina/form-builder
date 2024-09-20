@@ -18,7 +18,7 @@ const Editbox = ({ properties, setRequired, deleteField }: TEditboxProps) => {
         {properties.map((item, index) => {
           const Component = ElementsObj[item.type]; // Dynamically access the component
           return Component ? (
-            <Component key={index} {...item} deleteProperty={deleteField} />
+            <Component key={index} item={item} deleteField={deleteField} />
           ) : null; // Render the component with props
         })}
       </div>

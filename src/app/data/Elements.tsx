@@ -28,7 +28,6 @@ import SwitchComp from "../_components/elements/switch/switch";
 type TElement = {
   label: string;
   icon: React.ReactNode;
-  component: JSX.Element;
   type: string;
 };
 
@@ -36,73 +35,61 @@ export const elements: TElement[] = [
   {
     label: "Text input",
     icon: <CaseSensitive size={16} />,
-    component: <TextInput />,
     type: "text_input",
   },
   {
     label: "Email",
     icon: <Mail size={16} />,
-    component: <EmailInput />,
     type: "email_input",
   },
   {
     label: "Number Input",
     icon: <Plus size={16} />,
-    component: <NumberInput />,
     type: "number_input",
   },
   {
     label: "Textbox",
     icon: <BoxSelect size={16} />,
     type: "text_box",
-    component: <Textbox />,
-  },
+},
   {
     label: "Date picker",
     icon: <Calendar size={16} />,
     type: "date_picker",
-    component: <Datepicker />,
-  },
+},
   {
     label: "Url Input",
     icon: <Link size={16} />,
-    component: <UrlInput />,
     type: "url_input",
   },
   {
     label: "Range",
     icon: <SlidersHorizontal size={16} />,
-    component: <Range />,
     type: "range",
   },
   {
     label: "Dropdown",
     icon: <ChevronDown size={16} />,
-    component: <DropdownComp />,
     type: "dropdown",
   },
   {
     label: "Muiltiple Choice",
     icon: <List size={16} />,
-    component: <Multiplechoice />,
     type: "multichoice",
   },
   {
     label: "Checkbox",
     icon: <CircleCheck size={16} />,
-    component: <CheckboxComp />,
     type: "checkbox",
   },
   {
     label: "Linebreak",
     icon: <MoveVertical size={16} />,
-    component: <Linebreak />,
     type: "linebreak",
   },
   {
     label: "Switch",
     icon: <ToggleLeft size={16} />,
-    component: <SwitchComp />,
     type: "switch",
   },
 ];

@@ -1,5 +1,22 @@
-const Range = () => {
-  return <div>range</div>;
+"use client";
+
+import EditComp from "../../edit_comp/edit_comp";
+
+import * as React from "react";
+import { TCompProps } from "../types";
+
+const RangeComp = ({ item, deleteField }: TCompProps) => {
+  const [isSheetOpen, setSheetOpen] = React.useState(false);
+
+  return (
+    <EditComp
+      deleteField={deleteField}
+      id={item.id}
+      setSheetOpen={setSheetOpen}
+    >
+      <div>RangeComp</div>
+    </EditComp>
+  );
 };
 
-export default Range;
+export default RangeComp;
