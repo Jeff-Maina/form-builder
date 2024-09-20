@@ -9,6 +9,7 @@ import PreviewForm from "./modals/preview-form-modal";
 import ViewCodeModal from "./modals/view-code-modal";
 import TextInput from "./elements/text-input/text-input";
 import { TProperty } from "../types";
+import { ElementsObj, elements } from "../data/Elements";
 
 type TEditboxProps = {
   properties: TProperty[];
@@ -63,8 +64,12 @@ const Editbox = ({ properties, setRequired }: TEditboxProps) => {
         </nav>
         {/* container */}
         <div className="w-full h-full border rounded-lg p-3">
-          <TextInput />
+          {properties.map((item, index) => {
+            const Component = ElementsObj[item.type]; // Dynamically access the component
+            return Component ? <Component key={index} {...item} /> : null; // Render the component with props
+          })}
         </div>
+        ;
       </div>
       <ResetModal
         isResetingForm={isResetingForm}

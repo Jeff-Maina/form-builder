@@ -28,12 +28,12 @@ type TUiSchema = TUi[];
 
 type TProperty = {
   type: string;
-  label?: string;
+  label: string;
   placeholder?: string;
-  required: boolean;
+  required?: boolean;
   isLabelHidden: boolean;
   disabled: boolean;
-  className: string;
+  className?: string;
   validations?: TValidation[];
   uiSchema?: TUiSchema;
 };

@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import Editbox from "./_components/editbox";
 import Sidebar from "./_components/sidebar";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { TFormData } from "./types";
+import { TFormData, TProperty } from "./types";
 
 export default function Home() {
   const onDragEnd = useCallback(() => {
@@ -34,11 +34,20 @@ export default function Home() {
     }
   };
 
+  const addProperty = (obj: TProperty) => {
+    console.log(obj);
+    console.log(formData);
+    setFormData({
+      ...formData,
+      properties: [...formData.properties, obj],
+    });
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className=" max-w-7xl m-auto w-full lg:h-screen grid grid-cols-4 bg-grid">
         <div className="h-full col-span-1 p-3">
-          <Sidebar />
+          <Sidebar addProperty={addProperty} />
         </div>
         <div className="h-full col-span-3 p-3">
           <Editbox setRequired={setRequired} properties={formData.properties} />

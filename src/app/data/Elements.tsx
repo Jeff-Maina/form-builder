@@ -106,3 +106,18 @@ export const elements: TElement[] = [
     type: "switch",
   },
 ];
+
+export const ElementsObj: Record<string, React.ComponentType<any>> = {
+  text_input: TextInput,
+  email_input: EmailInput,
+  number_input: NumberInput,
+  text_box: Textbox,
+  date_picker: Datepicker,
+  url_input: UrlInput,
+  range: Range,
+  dropdown: DropdownComp,
+  multichoice: Multiplechoice,
+  checkbox: CheckboxComp,
+  linebreak: Linebreak,
+  switch: SwitchComp,
+};
