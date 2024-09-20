@@ -8,8 +8,14 @@ import ResetModal from "./modals/reset-modal";
 import PreviewForm from "./modals/preview-form-modal";
 import ViewCodeModal from "./modals/view-code-modal";
 import TextInput from "./elements/text-input/text-input";
+import { TProperty } from "../types";
 
-const Editbox = () => {
+type TEditboxProps = {
+  properties: TProperty[];
+  setRequired: (value: string) => void;
+};
+
+const Editbox = ({ properties, setRequired }: TEditboxProps) => {
   // * action states
   const [isPreviewingForm, setPreviewForm] = React.useState(false);
   const [isViewingCode, setViewingCode] = React.useState(false);
@@ -55,6 +61,7 @@ const Editbox = () => {
             </Button>
           </div>
         </nav>
+        {/* container */}
         <div className="w-full h-full border rounded-lg p-3">
           <TextInput />
         </div>
