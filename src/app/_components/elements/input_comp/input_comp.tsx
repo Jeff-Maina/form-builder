@@ -9,13 +9,15 @@ import { Edit, Trash } from "lucide-react";
 import * as React from "react";
 import ModelTab from "./model-tab";
 import DesignTab from "./design-tab";
+import { TCompProps } from "../types";
+import EditComp from "../../edit_comp/edit_comp";
 
 type TSheetProps = {
   isSheetOpen: boolean;
   setSheetOpen: (value: boolean) => void;
 };
 
-const TextInputSheet = ({ isSheetOpen, setSheetOpen }: TSheetProps) => {
+const InputCompSheet = ({ isSheetOpen, setSheetOpen }: TSheetProps) => {
   return (
     <Sheet.Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
       <Sheet.SheetContent className="border-none p-6 shadow-none !max-w-lg">
@@ -56,36 +58,32 @@ const TextInputSheet = ({ isSheetOpen, setSheetOpen }: TSheetProps) => {
   );
 };
 
-const TextInput = () => {
+const InputComp = ({
+  item,
+  deleteField,
+  inputType,
+}: TCompProps & { inputType: string }) => {
   const [isSheetOpen, setSheetOpen] = React.useState(false);
+
   return (
     <>
-      <div className="p-4 border border-dashed hover:border-neutral-500 rounded-md !cursor-pointer relative group/card transition-all">
+      <EditComp
+        deleteField={deleteField}
+        id={item.id}
+        setSheetOpen={setSheetOpen}
+      >
         <div className="grid w-full max-w-sm items-center gap-2 relative">
-          <Label htmlFor="email">Email</Label>
-          <Input type="email" id="email" placeholder="Email" />
+          <Label htmlFor="input">
+            {item.label}{" "}
+            {item.required ? <span className="text-red-500">*</span> : null}
+          </Label>
+          <Input type={inputType} id="input" placeholder={item.placeholder} />
         </div>
-        <div className="absolute bottom-0 right-0 p-2 flex items-center opacity-0 transition-all group-hover/card:opacity-100 ">
-          <Button
-            className="text-neutral-400 hover:text-neutral-800 transition-all"
-            variant={"ghost"}
-            size={"sm"}
-            onClick={() => setSheetOpen(true)}
-          >
-            <Edit size={16} />
-          </Button>
-          <Button
-            className="text-neutral-400 hover:text-neutral-800 transition-all"
-            variant={"ghost"}
-            size={"sm"}
-          >
-            <Trash size={16} />
-          </Button>{" "}
-        </div>
-      </div>
-      <TextInputSheet isSheetOpen={isSheetOpen} setSheetOpen={setSheetOpen} />
+      </EditComp>
+
+      <InputCompSheet isSheetOpen={isSheetOpen} setSheetOpen={setSheetOpen} />
     </>
   );
 };
 
-export default TextInput;
+export default InputComp;

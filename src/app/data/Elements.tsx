@@ -6,18 +6,16 @@ import {
   CircleCheck,
   Link,
   List,
+  Lock,
   Mail,
   MoveVertical,
   Plus,
   SlidersHorizontal,
   ToggleLeft,
 } from "lucide-react";
-import TextInput from "../_components/elements/text-input/text-input";
-import EmailInput from "../_components/elements/email_input/email_input";
-import NumberInput from "../_components/elements/number_input/number_input";
+import InputComp from "../_components/elements/input_comp/input_comp";
 import Textbox from "../_components/elements/textbox/textbox";
 import Datepicker from "../_components/elements/date_picker/date_picker";
-import UrlInput from "../_components/elements/url_input/url_input";
 import Range from "../_components/elements/range/range";
 import DropdownComp from "../_components/elements/dropdown/dropdown";
 import Multiplechoice from "../_components/elements/multiple_choice/multiple_choice";
@@ -33,12 +31,12 @@ type TElement = {
 
 export const elements: TElement[] = [
   {
-    label: "Text input",
+    label: "Text Input",
     icon: <CaseSensitive size={16} />,
     type: "text_input",
   },
   {
-    label: "Email",
+    label: "Email Input",
     icon: <Mail size={16} />,
     type: "email_input",
   },
@@ -48,19 +46,24 @@ export const elements: TElement[] = [
     type: "number_input",
   },
   {
+    label: "Url Input",
+    icon: <Link size={16} />,
+    type: "url_input",
+  },
+  {
+    label: "Password",
+    icon: <Lock size={16} />,
+    type: "password_input",
+  },
+  {
     label: "Textbox",
     icon: <BoxSelect size={16} />,
     type: "text_box",
-},
+  },
   {
     label: "Date picker",
     icon: <Calendar size={16} />,
     type: "date_picker",
-},
-  {
-    label: "Url Input",
-    icon: <Link size={16} />,
-    type: "url_input",
   },
   {
     label: "Range",
@@ -95,12 +98,13 @@ export const elements: TElement[] = [
 ];
 
 export const ElementsObj: Record<string, React.ComponentType<any>> = {
-  text_input: TextInput,
-  email_input: EmailInput,
-  number_input: NumberInput,
+  text_input: InputComp,
+  email_input: InputComp,
+  number_input: InputComp,
+  url_input: InputComp,
+  password_input: InputComp,
   text_box: Textbox,
   date_picker: Datepicker,
-  url_input: UrlInput,
   range: Range,
   dropdown: DropdownComp,
   multichoice: Multiplechoice,

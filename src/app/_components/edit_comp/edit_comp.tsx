@@ -15,7 +15,7 @@ const EditComp = ({
   id,
 }: TEditCompProps) => {
   return (
-    <div className="p-4 border border-dashed hover:border-neutral-500 rounded-md !cursor-pointer relative group/card transition-all">
+    <div className="p-4  bg-white  rounded-md relative group/card transition-all">
       {children}
       <div className="absolute bottom-0 right-0 p-2 flex items-center opacity-0 transition-all group-hover/card:opacity-100 ">
         <Button

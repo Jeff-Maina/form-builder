@@ -18,13 +18,14 @@ type TSidebarProps = {
 };
 
 const Sidebar = ({ addProperty }: TSidebarProps) => {
-  const addNewProperty = (value: string) => {
+  const addNewProperty = (value: string, label: string) => {
     const propObj = {
       id: uuidv4(),
       type: value,
-      label: "Change label",
+      label,
       isLabelHidden: false,
       disabled: false,
+      placeholder: "Placeholder",
       required: true,
     };
     addProperty(propObj);
@@ -48,7 +49,7 @@ const Sidebar = ({ addProperty }: TSidebarProps) => {
                 <button
                   key={index}
                   onClick={() => {
-                    addNewProperty(element.type);
+                    addNewProperty(element.type, element.label);
                   }}
                   className="text-sm flex p-2 pl-4 border w-full rounded items-center gap-4 bg-white  font-medium text-neutral-600  hover:bg-black hover:border-black  hover:text-white transition-all duration-100"
                 >

@@ -34,6 +34,13 @@ export default function Home() {
     }
   };
 
+  const setProperties = (properties: TProperty[]) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      properties: properties,
+    }));
+  };
+
   const addProperty = (obj: TProperty) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -55,11 +62,12 @@ export default function Home() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className=" max-w-7xl m-auto w-full lg:h-screen grid grid-cols-4 bg-grid">
-        <div className="h-full col-span-3 p-3">
+        <div className="h-full pt-6 col-span-3 p-3">
           <Editbox
             deleteField={deleteProperty}
             setRequired={setRequired}
             properties={formData.properties}
+            setProperties={setProperties}
           />
         </div>
         <div className="h-full col-span-1 p-3">
