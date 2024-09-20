@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Editbox from "./_components/editbox";
 import Sidebar from "./_components/sidebar";
 import { DragDropContext } from "@hello-pangea/dnd";
@@ -35,22 +35,35 @@ export default function Home() {
   };
 
   const addProperty = (obj: TProperty) => {
-    console.log(obj);
-    console.log(formData);
-    setFormData({
-      ...formData,
-      properties: [...formData.properties, obj],
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      properties: [...prevFormData.properties, obj],
+    }));
   };
+
+  const deleteProperty = (id: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      properties: prevFormData.properties.filter((item) => item.id !== id),
+    }));
+  };
+
+  useEffect(() => {
+    console.log(formData); // Logs the updated formData
+  }, [formData]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className=" max-w-7xl m-auto w-full lg:h-screen grid grid-cols-4 bg-grid">
+        <div className="h-full col-span-3 p-3">
+          <Editbox
+            deleteField={deleteProperty}
+            setRequired={setRequired}
+            properties={formData.properties}
+          />
+        </div>
         <div className="h-full col-span-1 p-3">
           <Sidebar addProperty={addProperty} />
-        </div>
-        <div className="h-full col-span-3 p-3">
-          <Editbox setRequired={setRequired} properties={formData.properties} />
         </div>
       </div>{" "}
     </DragDropContext>

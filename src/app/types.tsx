@@ -27,6 +27,7 @@ type TUi = {
 type TUiSchema = TUi[];
 
 type TProperty = {
+  id: string;
   type: string;
   label: string;
   placeholder?: string;
