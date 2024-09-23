@@ -12,44 +12,116 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 
 // Collapsible elements
 import * as Collapsible from "@/components/ui/collapsible";
+import { TProperty } from "@/app/types";
 
-const ModelTab = () => {
+type TModelProps = {
+  inputType: string;
+  FieldFunctions: {
+    setHideLabel: () => void;
+    setHidePlaceholder: () => void;
+    setHideDescription: () => void;
+    setLabel: (value: string) => void;
+    setDefaultValue: (value: string | number | undefined) => void;
+    setDescription: (value: string) => void;
+    setPlaceholder: (value: string) => void;
+    setIsRequired: () => void;
+    setIsDisabled: () => void;
+  };
+  FieldProperties: TProperty;
+};
+
+const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
+  console.log(FieldProperties.required);
   return (
     <div className="flex flex-col">
       <div className="flex flex-col gap-4">
-        <h1 className="mt-5 mb-4 font-semibold">Field properties</h1>
-        <div className="p-3 border rounded-md flex items-center justify-between">
-          <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium">Hide label</p>
-            <p className="text-xs text-neutral-600">Hide the fields input.</p>
+        {/* property switches */}
+        <div className="flex flex-col gap-2">
+          <div className="p-3 border rounded-md flex items-center justify-between">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium">Hide label</p>
+              <p className="text-xs text-neutral-600">
+                Hide the field's label.
+              </p>
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={FieldProperties.isLabelHidden}
+                  onCheckedChange={() => {
+                    FieldFunctions.setHideLabel();
+                  }}
+                  id="required"
+                />
+              </div>
+            </div>
           </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <Switch id="required" />
+
+          <div className="p-3 border rounded-md flex items-center justify-between">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium">Hide description message</p>
+              <p className="text-xs text-neutral-600">
+                Hide the field's description message.
+              </p>
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={FieldProperties.isDescriptionHidden}
+                  onCheckedChange={() => {
+                    FieldFunctions.setHideDescription();
+                  }}
+                  id="required"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="p-3 border rounded-md flex items-center justify-between">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium">Disable input</p>
+              <p className="text-xs text-neutral-600">
+                Disable the field and make it inaccessible.
+              </p>
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  checked={FieldProperties.disabled}
+                  onCheckedChange={() => {
+                    FieldFunctions.setIsDisabled();
+                  }}
+                  id="required"
+                />
+              </div>
             </div>
           </div>
         </div>
-        <div className="grid w-full items-center gap-2 relative">
-          <Label className="text-neutral-600" htmlFor="field_label">
-            Field label
-          </Label>
-          <Input type="text" id="field_label" placeholder="Field Label" />
-        </div>
-        <div className="grid w-full items-center gap-2 relative">
-          <Label className="text-neutral-600" htmlFor="placeholder">
-            Placeholder
-          </Label>
-          <Input type="text" id="placeholder" placeholder="Placeholder" />
-        </div>
-        <div className="grid w-full items-center gap-2 relative">
-          <Label className="text-neutral-600" htmlFor="field_label">
-            Default value
-          </Label>
-          <Input type="text" id="field_label" placeholder="Defualt value" />
+
+        <hr className="my-4" />
+
+        <div className="flex flex-col gap-2">
+          <div className="grid w-full items-center gap-2 relative">
+            <Label className="text-neutral-600" htmlFor="field_label">
+              Field label
+            </Label>
+            <Input type="text" id="field_label" placeholder="Field Label" />
+          </div>
+          <div className="grid w-full items-center gap-2 relative">
+            <Label className="text-neutral-600" htmlFor="placeholder">
+              Placeholder
+            </Label>
+            <Input type="text" id="placeholder" placeholder="Placeholder" />
+          </div>
+          <div className="grid w-full items-center gap-2 relative">
+            <Label className="text-neutral-600" htmlFor="field_label">
+              Default value
+            </Label>
+            <Input type="text" id="field_label" placeholder="Default value" />
+          </div>
         </div>
       </div>
       <div>
-        <h1 className="mt-10 mb-7 font-semibold">Validation</h1>
+        <h1 className="mt-10 mb-5 font-semibold">Validation</h1>
         <div className="w-full flex flex-col gap-4">
           {/* required button */}
           <div className="grid gap-2">
@@ -63,7 +135,11 @@ const ModelTab = () => {
               </div>
               <div>
                 <div className="flex items-center space-x-2">
-                  <Switch id="required" />
+                  <Switch
+                    checked={FieldProperties.required}
+                    onCheckedChange={() => FieldFunctions.setIsRequired()}
+                    id="required"
+                  />
                 </div>
               </div>
             </div>

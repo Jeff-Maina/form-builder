@@ -35,6 +35,8 @@ type TProperty = {
   required?: boolean;
   defaultValue?: string | number;
   isLabelHidden: boolean;
+  isDescriptionHidden: boolean;
+  isPlaceholderHidden: boolean;
   disabled: boolean;
   className?: string;
   validations?: TValidation[];

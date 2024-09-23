@@ -11,16 +11,39 @@ import ModelTab from "./model-tab";
 import DesignTab from "./design-tab";
 import { TCompProps } from "../types";
 import EditComp from "../../edit_comp/edit_comp";
+import { TProperty } from "@/app/types";
 
 type TSheetProps = {
   isSheetOpen: boolean;
   setSheetOpen: (value: boolean) => void;
+  item: TCompProps["item"];
+  inputType: string;
+  FieldFunctions: {
+    setHideLabel: () => void;
+    setHidePlaceholder: () => void;
+    setHideDescription: () => void;
+    setLabel: (value: string) => void;
+    setDefaultValue: (value: string | number | undefined) => void;
+    setDescription: (value: string) => void;
+    setPlaceholder: (value: string) => void;
+    setIsRequired: () => void;
+    setIsDisabled: () => void;
+  };
+  FieldProperties: TProperty;
 };
 
-const InputCompSheet = ({ isSheetOpen, setSheetOpen }: TSheetProps) => {
+const InputCompSheet = ({
+  isSheetOpen,
+  setSheetOpen,
+  item,
+  inputType,
+  FieldFunctions,
+  FieldProperties,
+}: TSheetProps) => {
   return (
     <Sheet.Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
       <Sheet.SheetContent className="border-none p-6 shadow-none !max-w-lg">
+        <Sheet.SheetTitle></Sheet.SheetTitle>
         <ScrollArea className="w-full max-h-full h-full rounded-lg overflow-hidden">
           <div className="w-full h-full bg-white p-4 rounded-lg overflow-hidden">
             {/* ACTUAL TABS */}
@@ -40,8 +63,42 @@ const InputCompSheet = ({ isSheetOpen, setSheetOpen }: TSheetProps) => {
                   Design
                 </Tabs.TabsTrigger>
               </Tabs.TabsList>
+
+              <div className="w-full p-4 border-neutral-400 h-[140px]  border rounded-md my-4">
+                <div className="h-full flex flex-col w-full max-w-sm justify-center gap-2 relative">
+                  {!FieldProperties.isLabelHidden ? (
+                    <Label htmlFor="input">
+                      {FieldProperties.label}
+                      {FieldProperties.required ? (
+                        <span className="text-red-500 ml-1">*</span>
+                      ) : null}
+                    </Label>
+                  ) : null}
+                  <div className="grid gap-1">
+                    <Input
+                      disabled={FieldProperties.disabled}
+                      type={inputType}
+                      id="input"
+                      placeholder={FieldProperties.placeholder}
+                    />
+                    {!FieldProperties.isDescriptionHidden ? (
+                      <small className="text-muted-foreground">
+                        {FieldProperties.description}
+                      </small>
+                    ) : null}
+                    <small className="text-red-600">
+                      This is an error message
+                    </small>
+                  </div>
+                </div>
+              </div>
+
               <Tabs.TabsContent value="model">
-                <ModelTab />
+                <ModelTab
+                  inputType={inputType}
+                  FieldFunctions={FieldFunctions}
+                  FieldProperties={FieldProperties}
+                />
               </Tabs.TabsContent>
               <Tabs.TabsContent value="design">
                 <DesignTab />
@@ -65,6 +122,47 @@ const InputComp = ({
 }: TCompProps & { inputType: string }) => {
   const [isSheetOpen, setSheetOpen] = React.useState(false);
 
+  // states;
+  const [isLabelHidden, setHideLabel] = React.useState(item.isLabelHidden);
+  const [isPlaceholderHidden, setHidePlaceholder] = React.useState(
+    item.isPlaceholderHidden
+  );
+  const [isDescriptionHidden, setHideDescription] = React.useState(
+    item.isDescriptionHidden
+  );
+  const [label, setLabel] = React.useState(item.label);
+  const [description, setDescription] = React.useState(item.description);
+  const [defaultValue, setDefaultValue] = React.useState(item.defaultValue);
+  const [placeholder, setPlaceholder] = React.useState(item.placeholder);
+  const [isRequired, setIsRequired] = React.useState(item.required);
+  const [isDisabled, setIsDisabled] = React.useState(item.disabled);
+
+  const FieldProperties = {
+    id: item.id,
+    type: item.type,
+    disabled: isDisabled,
+    label,
+    description,
+    defaultValue,
+    placeholder,
+    required: isRequired,
+    isDescriptionHidden,
+    isPlaceholderHidden,
+    isLabelHidden,
+  };
+
+  const FieldFunctions = {
+    setHideLabel: () => setHideLabel(!isLabelHidden),
+    setHidePlaceholder: () => setHidePlaceholder(!isPlaceholderHidden),
+    setHideDescription: () => setHideDescription(!isDescriptionHidden),
+    setLabel,
+    setDefaultValue,
+    setDescription,
+    setPlaceholder,
+    setIsRequired: () => setIsRequired(!isRequired),
+    setIsDisabled: () => setIsDisabled(!isDisabled),
+  };
+
   return (
     <>
       <EditComp
@@ -74,14 +172,24 @@ const InputComp = ({
       >
         <div className="grid w-full max-w-sm items-center gap-2 relative">
           <Label htmlFor="input">
-            {item.label}{" "}
-            {item.required ? <span className="text-red-500">*</span> : null}
+            {label}{" "}
+            {isRequired ? <span className="text-red-500">*</span> : null}
           </Label>
-          <Input type={inputType} id="input" placeholder={item.placeholder} />
+          <div className="grid gap-1">
+            <Input type={inputType} id="input" placeholder={placeholder} />
+            <small className="text-muted-foreground">{description}</small>
+          </div>
         </div>
       </EditComp>
 
-      <InputCompSheet isSheetOpen={isSheetOpen} setSheetOpen={setSheetOpen} />
+      <InputCompSheet
+        item={item}
+        inputType={inputType}
+        isSheetOpen={isSheetOpen}
+        setSheetOpen={setSheetOpen}
+        FieldProperties={FieldProperties}
+        FieldFunctions={FieldFunctions}
+      />
     </>
   );
 };

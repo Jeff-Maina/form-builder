@@ -28,6 +28,9 @@ const Sidebar = ({ addProperty }: TSidebarProps) => {
       disabled: false,
       placeholder: "Placeholder",
       required: true,
+      isDescriptionHidden: false,
+      isPlaceholderHidden: false,
+      defaultValue: "",
     };
     addProperty(propObj);
   };
