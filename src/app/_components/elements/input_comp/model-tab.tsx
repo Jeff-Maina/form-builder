@@ -12,13 +12,95 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 
 // Collapsible elements
 import * as Collapsible from "@/components/ui/collapsible";
-import { TProperty } from "@/app/types";
+import { TProperty, TValidation } from "@/app/types";
 import { TFieldFunctions } from "./type";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+
+const fieldValidations = [
+  {
+    name: "Minimum length",
+    errorMessage: "",
+    metric: "",
+  },
+  {
+    name: "Maximum length",
+    errorMessage: "",
+    metric: "",
+  },
+  {
+    name: "Contains",
+    errorMessage: "",
+    metric: "",
+  },
+  {
+    name: "Ends with",
+    errorMessage: "",
+    metric: "",
+  },
+];
 
 type TModelProps = {
   inputType: string;
   FieldFunctions: TFieldFunctions;
   FieldProperties: TProperty;
+};
+
+type TValidationBoxProps = {
+  validation: TValidation;
+  updateValidation: (val: TValidation) => void;
+  removeValidation: () => void;
+};
+
+const ValidationBox = ({
+  validation,
+  updateValidation,
+  removeValidation,
+}: TValidationBoxProps) => {
+  const { name, errorMessage, metric } = validation;
+  const [metricState, setMetric] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  return (
+    <div className="grid w-full items-center gap-2 relative">
+      <Label className="text-neutral-600" htmlFor="max">
+        {name}
+      </Label>
+      <div className="flex items-center gap-2">
+        <Input
+          type="text"
+          id="min"
+          placeholder="Min length"
+          value={metricState}
+          onChange={(e) => setMetric(e.target.value)}
+        />
+        <Button
+          onClick={() => removeValidation()}
+          variant={"outline"}
+          size={"icon"}
+          className="text-neutral-500 hover:text-black shrink-0"
+        >
+          <Trash size={16} />
+        </Button>
+      </div>
+      <div>
+        <Collapsible.Collapsible>
+          <Collapsible.CollapsibleTrigger className="text-xs text-red-500 font-medium flex items-center gap-3">
+            {name} error message
+            <CaretSortIcon />
+          </Collapsible.CollapsibleTrigger>
+          <Collapsible.CollapsibleContent className="pt-2">
+            <Textarea
+              placeholder="Enter minlength error message"
+              value={errorMsg}
+              onChange={(e) => setErrorMsg(e.target.value)}
+            />
+          </Collapsible.CollapsibleContent>
+        </Collapsible.Collapsible>
+      </div>
+    </div>
+  );
 };
 
 const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
@@ -32,6 +114,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
     setPlaceholder,
     setIsRequired,
     setIsDisabled,
+    setValidations,
   } = FieldFunctions;
   const {
     isLabelHidden,
@@ -41,11 +124,13 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
     description,
     defaultValue,
     placeholder,
+    validations,
     required,
     disabled,
   } = FieldProperties;
+
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pt-6">
       <div className="flex flex-col gap-4">
         {/* property switches */}
         <div className="flex flex-col gap-2">
@@ -111,6 +196,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
 
         <hr className="my-4" />
 
+        {/* inputs  */}
         <div className="flex flex-col gap-4">
           {!FieldProperties.isLabelHidden && (
             <div className="grid w-full items-center gap-2 relative">
@@ -165,6 +251,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
           )}
         </div>
       </div>
+      {/* validations */}
       <div>
         <h1 className="mt-10 mb-5 font-semibold">Validation</h1>
         <div className="w-full flex flex-col gap-4">
@@ -181,124 +268,18 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
               <div>
                 <div className="flex items-center space-x-2">
                   <Switch
-                    checked={FieldProperties.required}
-                    onCheckedChange={() => FieldFunctions.setIsRequired()}
+                    checked={required}
+                    onCheckedChange={() => setIsRequired()}
                     id="required"
                   />
                 </div>
               </div>
-            </div>
-            <div>
-              <Collapsible.Collapsible>
-                <Collapsible.CollapsibleTrigger className="text-xs text-red-500 font-medium flex items-center gap-3">
-                  Required error message
-                  <CaretSortIcon />
-                </Collapsible.CollapsibleTrigger>
-                <Collapsible.CollapsibleContent className="pt-2">
-                  <Textarea placeholder="Enter required error message" />
-                </Collapsible.CollapsibleContent>
-              </Collapsible.Collapsible>
-            </div>
-          </div>
-          {/* validations */}
-          <div className="grid w-full items-center gap-2 relative">
-            <Label className="text-neutral-600" htmlFor="max">
-              Maximum length
-            </Label>
-            <Input type="text" id="max" placeholder="Max length" />
-            <div>
-              <Collapsible.Collapsible>
-                <Collapsible.CollapsibleTrigger className="text-xs text-red-500 font-medium flex items-center gap-3">
-                  Maxlength error message
-                  <CaretSortIcon />
-                </Collapsible.CollapsibleTrigger>
-                <Collapsible.CollapsibleContent className="pt-2">
-                  <Textarea placeholder="Enter maxlength error message" />
-                </Collapsible.CollapsibleContent>
-              </Collapsible.Collapsible>
-            </div>
-          </div>
-          <div className="grid w-full items-center gap-2 relative">
-            <Label className="text-neutral-600" htmlFor="max">
-              Minimum length
-            </Label>
-            <Input type="text" id="min" placeholder="Min length" />
-            <div>
-              <Collapsible.Collapsible>
-                <Collapsible.CollapsibleTrigger className="text-xs text-red-500 font-medium flex items-center gap-3">
-                  Minlength error message
-                  <CaretSortIcon />
-                </Collapsible.CollapsibleTrigger>
-                <Collapsible.CollapsibleContent className="pt-2">
-                  <Textarea placeholder="Enter minlength error message" />
-                </Collapsible.CollapsibleContent>
-              </Collapsible.Collapsible>
             </div>
           </div>
 
           {/* Advanced validations */}
 
           <h1 className="font-semibold">Advanced validations</h1>
-
-          <div className="flex flex-col gap-4">
-            <div className="grid gap-3 p-3 border rounded-md">
-              <div className="grid w-full items-center gap-2 relative">
-                <Label className="text-neutral-600" htmlFor="max">
-                  Starts with
-                </Label>
-                <Input type="text" id="min" placeholder="Starts with" />
-              </div>
-              <div>
-                <Collapsible.Collapsible>
-                  <Collapsible.CollapsibleTrigger className="text-xs text-red-500 font-medium flex items-center gap-3">
-                    Starts with error message
-                    <CaretSortIcon />
-                  </Collapsible.CollapsibleTrigger>
-                  <Collapsible.CollapsibleContent className="pt-2">
-                    <Textarea placeholder="Enter minlength error message" />
-                  </Collapsible.CollapsibleContent>
-                </Collapsible.Collapsible>
-              </div>
-            </div>
-            <div className="grid gap-3 p-3 border rounded-md">
-              <div className="grid w-full items-center gap-2 relative">
-                <Label className="text-neutral-600" htmlFor="max">
-                  Ends with
-                </Label>
-                <Input type="text" id="min" placeholder="Ends with" />
-              </div>
-              <div>
-                <Collapsible.Collapsible>
-                  <Collapsible.CollapsibleTrigger className="text-xs text-red-500 font-medium flex items-center gap-3">
-                    Ends with error message
-                    <CaretSortIcon />
-                  </Collapsible.CollapsibleTrigger>
-                  <Collapsible.CollapsibleContent className="pt-2">
-                    <Textarea placeholder="Enter ends with error message" />
-                  </Collapsible.CollapsibleContent>
-                </Collapsible.Collapsible>
-              </div>
-            </div>
-            <div className="grid gap-3 p-3 border rounded-md">
-              <div className="grid w-full items-center gap-2 relative">
-                <Label className="text-neutral-600" htmlFor="max">
-                  Contains
-                </Label>
-                <Input type="text" id="min" placeholder="Contains" />
-              </div>
-              <div>
-                <Collapsible.Collapsible>
-                  <Collapsible.CollapsibleTrigger className="text-xs text-red-500 font-medium flex items-center gap-3">
-                    Contains error message
-                    <CaretSortIcon />
-                  </Collapsible.CollapsibleTrigger>
-                  <Collapsible.CollapsibleContent className="pt-2">
-                    <Textarea placeholder="Enter contains error message" />
-                  </Collapsible.CollapsibleContent>
-                </Collapsible.Collapsible>
-              </div>
-            </div>
-          </div>
 
           <DropdownMenu.DropdownMenu>
             <DropdownMenu.DropdownMenuTrigger asChild>
@@ -307,21 +288,44 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
               </button>
             </DropdownMenu.DropdownMenuTrigger>
             <DropdownMenu.DropdownMenuContent
-              side="bottom"
-              align="center"
-              className="w-[430px]"
+              side="left"
+              align="end"
+              className="w-[300px]"
             >
-              <DropdownMenu.DropdownMenuItem className="cursor-pointer hover:bg-neutral-200">
-                Ends with
-              </DropdownMenu.DropdownMenuItem>
-              <DropdownMenu.DropdownMenuItem className="cursor-pointer hover:bg-neutral-200">
-                Starts with
-              </DropdownMenu.DropdownMenuItem>
-              <DropdownMenu.DropdownMenuItem className="cursor-pointer hover:bg-neutral-200">
-                Contains
-              </DropdownMenu.DropdownMenuItem>
+              {fieldValidations.map((val, index) => (
+                // <DropdownMenu.DropdownMenuItem
+                //   onClick={() => setValidations(val)}
+                //   className="p-2 hover:bg-neutral-200/60 text-sm rounded-md cursor-pointer"
+                // >
+                //   {val.name}
+                // </DropdownMenu.DropdownMenuItem>
+                <div
+                  className="p-2 flex items-center gap-2 hover:bg-neutral-100 "
+                  key={index}
+                >
+                  <Checkbox
+                    onCheckedChange={() => setValidations(val)}
+                    checked={validations?.some(
+                      (validation) => validation.name === val.name
+                    )}
+                    id={`${val}-${index}`}
+                    className="cursor-pointer"
+                  />
+                  <Label htmlFor={`${val}-${index}`} className="cursor-pointer">
+                    {val.name}{" "}
+                  </Label>
+                </div>
+              ))}
             </DropdownMenu.DropdownMenuContent>
           </DropdownMenu.DropdownMenu>
+          {validations?.map((validation, index) => (
+            <ValidationBox
+              key={index}
+              updateValidation={setValidations}
+              validation={validation}
+              removeValidation={() => setValidations(validation)}
+            />
+          ))}
         </div>
       </div>
     </div>

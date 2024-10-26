@@ -11,7 +11,7 @@ import ModelTab from "./model-tab";
 import DesignTab from "./design-tab";
 import { TCompProps } from "../types";
 import EditComp from "../../edit_comp/edit_comp";
-import { TProperty } from "@/app/types";
+import { TProperty, TValidation } from "@/app/types";
 import { TFieldFunctions } from "./type";
 
 type TSheetProps = {
@@ -37,8 +37,8 @@ const InputCompSheet = ({
     <Sheet.Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
       <Sheet.SheetContent className="border-none p-2 shadow-none !max-w-xl">
         <Sheet.SheetTitle></Sheet.SheetTitle>
-        <ScrollArea className="w-full max-h-full h-full rounded overflow-hidden">
-          <div className="w-full h-full bg-white p-4 rounded overflow-hidden">
+        <ScrollArea className="w-full max-h-full h-full rounded overflow-hidden border border-neutral-300 ">
+          <div className="w-full h-full bg-white p-4 shadow-xl rounded overflow-hidden">
             {/* ACTUAL TABS */}
 
             <Tabs.Tabs defaultValue="model" className="w-full">
@@ -56,36 +56,6 @@ const InputCompSheet = ({
                   Design
                 </Tabs.TabsTrigger>
               </Tabs.TabsList>
-
-              {/* preview */}
-              <div className="w-full p-4 border-neutral-400 h-[140px]  border rounded-md my-4">
-                <div className="h-full flex flex-col w-full max-w-sm justify-center gap-2 relative">
-                  {!FieldProperties.isLabelHidden ? (
-                    <Label htmlFor="input">
-                      {FieldProperties.label}
-                      {FieldProperties.required ? (
-                        <span className="text-red-500 ml-1">*</span>
-                      ) : null}
-                    </Label>
-                  ) : null}
-                  <div className="grid gap-1">
-                    <Input
-                      disabled={FieldProperties.disabled}
-                      type={inputType}
-                      id="input"
-                      placeholder={FieldProperties.placeholder}
-                    />
-                    {!FieldProperties.isDescriptionHidden ? (
-                      <small className="text-muted-foreground">
-                        {FieldProperties.description}
-                      </small>
-                    ) : null}
-                    <small className="text-red-600">
-                      This is an error message
-                    </small>
-                  </div>
-                </div>
-              </div>
 
               <Tabs.TabsContent value="model">
                 <ModelTab
@@ -131,6 +101,10 @@ const InputComp = ({
   const [isRequired, setIsRequired] = React.useState(item.required);
   const [isDisabled, setIsDisabled] = React.useState(item.disabled);
 
+  const [validations, setValidationsState] = React.useState<
+    TValidation[] | undefined
+  >(item.validations);
+
   const FieldProperties = {
     id: item.id,
     type: item.type,
@@ -142,6 +116,7 @@ const InputComp = ({
     required: isRequired,
     isDescriptionHidden,
     isPlaceholderHidden,
+    validations,
     isLabelHidden,
   };
 
@@ -155,11 +130,33 @@ const InputComp = ({
     setPlaceholder,
     setIsRequired: () => setIsRequired(!isRequired),
     setIsDisabled: () => setIsDisabled(!isDisabled),
+
+    setValidations: (val: TValidation) => {
+      setValidationsState((prev) => {
+        const existingValidations = prev ?? [];
+        if (
+          !existingValidations.some(
+            (validation) => validation.name === val.name
+          )
+        ) {
+          return [...existingValidations, val];
+        }
+
+        const filteredValidations = existingValidations.filter(
+          (validation) => validation.name !== val.name
+        );
+        
+        return filteredValidations;
+      });
+    },
   };
+
+  const [isEditing, setEditing] = React.useState(false);
 
   return (
     <>
       <EditComp
+        isSheetOpen={isSheetOpen}
         deleteField={deleteField}
         id={item.id}
         setSheetOpen={setSheetOpen}
@@ -172,9 +169,17 @@ const InputComp = ({
             </Label>
           )}
           <div className="grid gap-1">
-            <Input type={inputType} id="input" placeholder={placeholder} disabled={isDisabled} />
-            {!isDescriptionHidden && <small className="text-muted-foreground">{description}</small>}
-            <small className="text-red-600">This is an error message</small>
+            <Input
+              type={inputType}
+              value={defaultValue}
+              id="input"
+              placeholder={placeholder}
+              disabled={isDisabled}
+            />
+            {!isDescriptionHidden && (
+              <small className="text-muted-foreground">{description}</small>
+            )}
+            {/* <small className="text-red-600">This is an error message</small> */}
           </div>
         </div>
       </EditComp>
@@ -192,3 +197,7 @@ const InputComp = ({
 };
 
 export default InputComp;
+
+/*
+  implement custom required error messages
+*/

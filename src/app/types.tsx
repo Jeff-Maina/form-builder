@@ -13,7 +13,8 @@ type TDraggableProps = {
 
 type TValidation = {
   name: string;
-  message: string;
+  errorMessage: string;
+  metric: string | number;
 };
 
 type TUiProp = {
@@ -50,4 +51,4 @@ type TFormData = {
   properties: TProperty[];
 };
 
-export type { TFormData, TProperty };
+export type { TFormData, TProperty, TValidation };

@@ -64,7 +64,7 @@ export default function Home() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className=" max-w-[110rem] m-auto w-full lg:h-screen grid grid-cols-5 bg-grid">
-        <div className=" col-span-1 p-3">
+        <div className=" col-span-1 p-3 px-0">
           <Sidebar addProperty={addProperty} />
         </div>
 
@@ -77,7 +77,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="h-screen col-span-2 p-3">
+        <div className="h-screen col-span-2 p-3 px-0">
           <div className="w-full h-full border rounded-md"></div>
         </div>
       </div>{" "}

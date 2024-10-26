@@ -1,3 +1,5 @@
+import { TValidation } from "@/app/types";
+
 type TFieldFunctions = {
     setHideLabel: () => void;
     setHidePlaceholder: () => void;
@@ -8,6 +10,7 @@ type TFieldFunctions = {
     setPlaceholder: (value: string) => void;
     setIsRequired: () => void;
     setIsDisabled: () => void;
+    setValidations: (obj: TValidation) => void
 }
 
 export type { TFieldFunctions }
