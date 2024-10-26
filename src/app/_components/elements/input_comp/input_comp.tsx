@@ -12,23 +12,14 @@ import DesignTab from "./design-tab";
 import { TCompProps } from "../types";
 import EditComp from "../../edit_comp/edit_comp";
 import { TProperty } from "@/app/types";
+import { TFieldFunctions } from "./type";
 
 type TSheetProps = {
   isSheetOpen: boolean;
   setSheetOpen: (value: boolean) => void;
   item: TCompProps["item"];
   inputType: string;
-  FieldFunctions: {
-    setHideLabel: () => void;
-    setHidePlaceholder: () => void;
-    setHideDescription: () => void;
-    setLabel: (value: string) => void;
-    setDefaultValue: (value: string | number | undefined) => void;
-    setDescription: (value: string) => void;
-    setPlaceholder: (value: string) => void;
-    setIsRequired: () => void;
-    setIsDisabled: () => void;
-  };
+  FieldFunctions: TFieldFunctions;
   FieldProperties: TProperty;
 };
 
@@ -40,30 +31,33 @@ const InputCompSheet = ({
   FieldFunctions,
   FieldProperties,
 }: TSheetProps) => {
+  console.log(FieldProperties);
+
   return (
     <Sheet.Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-      <Sheet.SheetContent className="border-none p-6 shadow-none !max-w-lg">
+      <Sheet.SheetContent className="border-none p-2 shadow-none !max-w-xl">
         <Sheet.SheetTitle></Sheet.SheetTitle>
-        <ScrollArea className="w-full max-h-full h-full rounded-lg overflow-hidden">
-          <div className="w-full h-full bg-white p-4 rounded-lg overflow-hidden">
+        <ScrollArea className="w-full max-h-full h-full rounded overflow-hidden">
+          <div className="w-full h-full bg-white p-4 rounded overflow-hidden">
             {/* ACTUAL TABS */}
 
             <Tabs.Tabs defaultValue="model" className="w-full">
-              <Tabs.TabsList className="w-full bg-white gap-3">
+              <Tabs.TabsList className="w-full b gap-3">
                 <Tabs.TabsTrigger
-                  className="w-2/4 !py-2 data-[state=active]:bg-neutral-200 hover:bg-neutral-100 transition-all shadow-none !text-neutral-800"
+                  className="w-2/4  data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
                   value="model"
                 >
                   Model
                 </Tabs.TabsTrigger>
                 <Tabs.TabsTrigger
-                  className="w-2/4 !py-2 data-[state=active]:bg-neutral-200 hover:bg-neutral-100 transition-all shadow-none !text-neutral-800"
+                  className="w-2/4  data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
                   value="design"
                 >
                   Design
                 </Tabs.TabsTrigger>
               </Tabs.TabsList>
 
+              {/* preview */}
               <div className="w-full p-4 border-neutral-400 h-[140px]  border rounded-md my-4">
                 <div className="h-full flex flex-col w-full max-w-sm justify-center gap-2 relative">
                   {!FieldProperties.isLabelHidden ? (
@@ -171,13 +165,16 @@ const InputComp = ({
         setSheetOpen={setSheetOpen}
       >
         <div className="grid w-full max-w-sm items-center gap-2 relative">
-          <Label htmlFor="input">
-            {label}{" "}
-            {isRequired ? <span className="text-red-500">*</span> : null}
-          </Label>
+          {!isLabelHidden && (
+            <Label htmlFor="input">
+              {label}{" "}
+              {isRequired ? <span className="text-red-500">*</span> : null}
+            </Label>
+          )}
           <div className="grid gap-1">
-            <Input type={inputType} id="input" placeholder={placeholder} />
-            <small className="text-muted-foreground">{description}</small>
+            <Input type={inputType} id="input" placeholder={placeholder} disabled={isDisabled} />
+            {!isDescriptionHidden && <small className="text-muted-foreground">{description}</small>}
+            <small className="text-red-600">This is an error message</small>
           </div>
         </div>
       </EditComp>

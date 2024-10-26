@@ -13,25 +13,37 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 // Collapsible elements
 import * as Collapsible from "@/components/ui/collapsible";
 import { TProperty } from "@/app/types";
+import { TFieldFunctions } from "./type";
 
 type TModelProps = {
   inputType: string;
-  FieldFunctions: {
-    setHideLabel: () => void;
-    setHidePlaceholder: () => void;
-    setHideDescription: () => void;
-    setLabel: (value: string) => void;
-    setDefaultValue: (value: string | number | undefined) => void;
-    setDescription: (value: string) => void;
-    setPlaceholder: (value: string) => void;
-    setIsRequired: () => void;
-    setIsDisabled: () => void;
-  };
+  FieldFunctions: TFieldFunctions;
   FieldProperties: TProperty;
 };
 
 const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
-  console.log(FieldProperties.required);
+  const {
+    setHideLabel,
+    setHidePlaceholder,
+    setHideDescription,
+    setLabel,
+    setDefaultValue,
+    setDescription,
+    setPlaceholder,
+    setIsRequired,
+    setIsDisabled,
+  } = FieldFunctions;
+  const {
+    isLabelHidden,
+    isPlaceholderHidden,
+    isDescriptionHidden,
+    label,
+    description,
+    defaultValue,
+    placeholder,
+    required,
+    disabled,
+  } = FieldProperties;
   return (
     <div className="flex flex-col">
       <div className="flex flex-col gap-4">
@@ -47,9 +59,9 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
             <div>
               <div className="flex items-center space-x-2">
                 <Switch
-                  checked={FieldProperties.isLabelHidden}
+                  checked={isLabelHidden}
                   onCheckedChange={() => {
-                    FieldFunctions.setHideLabel();
+                    setHideLabel();
                   }}
                   id="required"
                 />
@@ -67,9 +79,9 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
             <div>
               <div className="flex items-center space-x-2">
                 <Switch
-                  checked={FieldProperties.isDescriptionHidden}
+                  checked={isDescriptionHidden}
                   onCheckedChange={() => {
-                    FieldFunctions.setHideDescription();
+                    setHideDescription();
                   }}
                   id="required"
                 />
@@ -86,9 +98,9 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
             <div>
               <div className="flex items-center space-x-2">
                 <Switch
-                  checked={FieldProperties.disabled}
+                  checked={disabled}
                   onCheckedChange={() => {
-                    FieldFunctions.setIsDisabled();
+                    setIsDisabled();
                   }}
                   id="required"
                 />
@@ -99,25 +111,58 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
 
         <hr className="my-4" />
 
-        <div className="flex flex-col gap-2">
-          <div className="grid w-full items-center gap-2 relative">
-            <Label className="text-neutral-600" htmlFor="field_label">
-              Field label
-            </Label>
-            <Input type="text" id="field_label" placeholder="Field Label" />
-          </div>
+        <div className="flex flex-col gap-4">
+          {!FieldProperties.isLabelHidden && (
+            <div className="grid w-full items-center gap-2 relative">
+              <Label className="text-neutral-600" htmlFor="field_label">
+                Field label
+              </Label>
+              <Input
+                type="text"
+                id="field_label"
+                placeholder="Field Label"
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}
+              />
+            </div>
+          )}
           <div className="grid w-full items-center gap-2 relative">
             <Label className="text-neutral-600" htmlFor="placeholder">
               Placeholder
             </Label>
-            <Input type="text" id="placeholder" placeholder="Placeholder" />
+            <Input
+              type="text"
+              id="placeholder"
+              placeholder="Placeholder"
+              value={placeholder}
+              onChange={(e) => setPlaceholder(e.target.value)}
+            />
           </div>
           <div className="grid w-full items-center gap-2 relative">
             <Label className="text-neutral-600" htmlFor="field_label">
               Default value
             </Label>
-            <Input type="text" id="field_label" placeholder="Default value" />
+            <Input
+              type="text"
+              id="field_label"
+              placeholder="Default value"
+              value={defaultValue}
+              onChange={(e) => setDefaultValue(e.target.value)}
+            />
           </div>
+          {!isDescriptionHidden && (
+            <div className="grid w-full items-center gap-2 relative">
+              <Label className="text-neutral-600" htmlFor="field_label">
+                Description
+              </Label>
+              <Textarea
+                id="field_label"
+                placeholder="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+          )}
         </div>
       </div>
       <div>

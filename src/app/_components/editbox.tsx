@@ -5,6 +5,7 @@ import { TProperty } from "../types";
 import { ElementsObj } from "../data/Elements";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type TEditboxProps = {
   properties: TProperty[];
@@ -53,47 +54,53 @@ const Editbox = ({
             )}
           >
             {/* container */}
-            <div className="w-full h-full  rounded-lg p-3 flex flex-col gap-3">
-              {properties.map((item, index) => {
-                const Component = ElementsObj[item.type];
-                const itemTypes: any = {
-                  text_input: "text",
-                  number_input: "number",
-                  email_input: "email",
-                  url_input: "url",
-                  password_input: "password",
-                };
-                return (
-                  <Draggable key={item.id} draggableId={item.id} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className={cn(
-                          "!cursor-grab active:cursor-grabbing rounded overflow-hidden border ",
-                          snapshot.isDragging
-                            ? "border border-neutral-700"
-                            : "border-dashed border-neutral-300 hover:border-neutral-500"
-                        )}
-                      >
-                        {Component ? (
-                          <Component
-                            item={item}
-                            deleteField={deleteField}
-                            inputType={itemTypes[item.type]}
-                          />
-                        ) : null}
-                        {}
-                      </div>
-                    )}
-                  </Draggable>
-                );
+            <ScrollArea className="h-full max-h-full flex flex-col">
+              <div className="w-full h-full  rounded-lg p-3 flex flex-col gap-3">
+                {properties.map((item, index) => {
+                  const Component = ElementsObj[item.type];
+                  const itemTypes: any = {
+                    text_input: "text",
+                    number_input: "number",
+                    email_input: "email",
+                    url_input: "url",
+                    password_input: "password",
+                  };
+                  return (
+                    <Draggable
+                      key={item.id}
+                      draggableId={item.id}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={cn(
+                            "!cursor-grab active:cursor-grabbing rounded overflow-hidden border ",
+                            snapshot.isDragging
+                              ? "border border-neutral-700"
+                              : "border-dashed border-neutral-300 hover:border-neutral-500"
+                          )}
+                        >
+                          {Component ? (
+                            <Component
+                              item={item}
+                              deleteField={deleteField}
+                              inputType={itemTypes[item.type]}
+                            />
+                          ) : null}
+                          {}
+                        </div>
+                      )}
+                    </Draggable>
+                  );
 
-                // Render the component with props
-              })}
-              {provided.placeholder}
-            </div>
+                  // Render the component with props
+                })}
+                {provided.placeholder}
+              </div>
+            </ScrollArea>
           </div>
         )}
       </Droppable>

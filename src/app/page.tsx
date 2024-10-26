@@ -5,6 +5,7 @@ import Editbox from "./_components/editbox";
 import Sidebar from "./_components/sidebar";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { TFormData, TProperty } from "./types";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Home() {
   const onDragEnd = useCallback(() => {
@@ -46,6 +47,7 @@ export default function Home() {
       ...prevFormData,
       properties: [...prevFormData.properties, obj],
     }));
+
   };
 
   const deleteProperty = (id: string) => {
@@ -61,8 +63,12 @@ export default function Home() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className=" max-w-7xl m-auto w-full lg:h-screen grid grid-cols-4 bg-grid">
-        <div className="h-full pt-6 col-span-3 p-3">
+      <div className=" max-w-[110rem] m-auto w-full lg:h-screen grid grid-cols-5 bg-grid">
+        <div className=" col-span-1 p-3">
+          <Sidebar addProperty={addProperty} />
+        </div>
+
+        <div className="h-screen col-span-2 p-3">
           <Editbox
             deleteField={deleteProperty}
             setRequired={setRequired}
@@ -70,8 +76,9 @@ export default function Home() {
             setProperties={setProperties}
           />
         </div>
-        <div className="h-full col-span-1 p-3">
-          <Sidebar addProperty={addProperty} />
+
+        <div className="h-screen col-span-2 p-3">
+          <div className="w-full h-full border rounded-md"></div>
         </div>
       </div>{" "}
     </DragDropContext>
