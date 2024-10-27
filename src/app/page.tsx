@@ -88,9 +88,7 @@ export default function Home() {
         </div>
 
         <div className="h-screen col-span-2 p-3 px-0">
-          <ScrollArea className="w-full h-full p-4 max-h-full flex flex-col border rounded-md">
-            <Previewbox formData={formData} />
-          </ScrollArea>
+          <Previewbox formData={formData} />
         </div>
       </div>{" "}
     </DragDropContext>

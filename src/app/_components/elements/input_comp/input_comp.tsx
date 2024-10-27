@@ -72,9 +72,11 @@ const InputCompSheet = ({
             </Tabs.Tabs>
 
             <Sheet.SheetFooter className="mt-4">
-              <Button onClick={() => updateProperties()} className="w-full">
-                Complete
-              </Button>
+              <Sheet.SheetClose asChild>
+                <Button onClick={() => updateProperties()} className="w-full">
+                  Complete
+                </Button>
+              </Sheet.SheetClose>
             </Sheet.SheetFooter>
           </div>
         </ScrollArea>
@@ -87,7 +89,7 @@ const InputComp = ({
   item,
   deleteField,
   inputType,
-  setProperties,
+  updateProperty,
 }: TCompProps & { inputType: string }) => {
   const [isSheetOpen, setSheetOpen] = React.useState(false);
 
@@ -180,6 +182,7 @@ const InputComp = ({
               id="input"
               placeholder={placeholder}
               disabled={isDisabled}
+              onChange={(e) => setDefaultValue(e.target.value)}
             />
             {!isDescriptionHidden && (
               <small className="text-muted-foreground">{description}</small>
@@ -195,7 +198,7 @@ const InputComp = ({
         isSheetOpen={isSheetOpen}
         setSheetOpen={setSheetOpen}
         FieldProperties={FieldProperties}
-        updateProperties={() => setProperties(FieldProperties)}
+        updateProperties={() => updateProperty(FieldProperties)}
         FieldFunctions={FieldFunctions}
       />
     </>

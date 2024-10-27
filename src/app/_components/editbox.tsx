@@ -91,6 +91,7 @@ const Editbox = ({
                               deleteField={deleteField}
                               inputType={itemTypes[item.type]}
                               setProperties={setProperties}
+                              updateProperty={updateProperty}
                             />
                           ) : null}
                           {}

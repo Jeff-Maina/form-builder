@@ -30,7 +30,7 @@ const Previewbox = ({ formData }: TPreviewProps) => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="preview"></TabsContent>
-        <TabsContent value="json" className="!w-full">
+        <TabsContent value="json" className="w-full h-full">
           <JSONPreview formData={formData} />
         </TabsContent>
         <TabsContent value="code">code.</TabsContent>

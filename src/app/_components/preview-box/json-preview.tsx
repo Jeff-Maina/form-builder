@@ -1,4 +1,5 @@
 import { TFormData } from "@/app/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type TJsonPreview = {
   formData: TFormData;
@@ -6,11 +7,11 @@ type TJsonPreview = {
 
 const JSONPreview = ({ formData }: { formData: TFormData }) => {
   return (
-    <div className="w-full p-4">
-      <pre className="whitespace-pre-wrap w-full font-mono ">
+    <ScrollArea className="max-h-[90vh] flex flex-col overflow-x-auto">
+      <pre className="whitespace-pre-wrap font-mono ">
         {JSON.stringify(formData, null, 2)}
       </pre>
-    </div>
+    </ScrollArea>
   );
 };
 
