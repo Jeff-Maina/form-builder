@@ -21,6 +21,7 @@ type TSheetProps = {
   inputType: string;
   FieldFunctions: TFieldFunctions;
   FieldProperties: TProperty;
+  updateProperties: () => void;
 };
 
 const InputCompSheet = ({
@@ -30,6 +31,7 @@ const InputCompSheet = ({
   inputType,
   FieldFunctions,
   FieldProperties,
+  updateProperties,
 }: TSheetProps) => {
   console.log(FieldProperties);
 
@@ -70,7 +72,9 @@ const InputCompSheet = ({
             </Tabs.Tabs>
 
             <Sheet.SheetFooter className="mt-4">
-              <Button className="w-full">Complete</Button>
+              <Button onClick={() => updateProperties()} className="w-full">
+                Complete
+              </Button>
             </Sheet.SheetFooter>
           </div>
         </ScrollArea>
@@ -83,6 +87,7 @@ const InputComp = ({
   item,
   deleteField,
   inputType,
+  setProperties,
 }: TCompProps & { inputType: string }) => {
   const [isSheetOpen, setSheetOpen] = React.useState(false);
 
@@ -145,7 +150,7 @@ const InputComp = ({
         const filteredValidations = existingValidations.filter(
           (validation) => validation.name !== val.name
         );
-        
+
         return filteredValidations;
       });
     },
@@ -190,6 +195,7 @@ const InputComp = ({
         isSheetOpen={isSheetOpen}
         setSheetOpen={setSheetOpen}
         FieldProperties={FieldProperties}
+        updateProperties={() => setProperties(FieldProperties)}
         FieldFunctions={FieldFunctions}
       />
     </>

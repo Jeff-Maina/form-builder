@@ -12,6 +12,7 @@ type TEditboxProps = {
   setRequired: (value: string) => void;
   deleteField: (id: string) => void;
   setProperties: (properties: TProperty[]) => void;
+  updateProperty: (property: TProperty) => void;
 };
 
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
@@ -26,6 +27,7 @@ const Editbox = ({
   setRequired,
   deleteField,
   setProperties,
+  updateProperty
 }: TEditboxProps) => {
   const onDragEnd = (result: any) => {
     if (!result.destination) {
@@ -88,6 +90,7 @@ const Editbox = ({
                               item={item}
                               deleteField={deleteField}
                               inputType={itemTypes[item.type]}
+                              setProperties={setProperties}
                             />
                           ) : null}
                           {}

@@ -6,6 +6,7 @@ import Sidebar from "./_components/sidebar";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { TFormData, TProperty } from "./types";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Previewbox from "./_components/preview-box/preview-box";
 
 export default function Home() {
   const onDragEnd = useCallback(() => {
@@ -42,12 +43,20 @@ export default function Home() {
     }));
   };
 
+  const updateProperty = (updatedProperty: TProperty) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      properties: prevFormData.properties.map((property) =>
+        property.id === updatedProperty.id ? updatedProperty : property
+      ),
+    }));
+  };
+
   const addProperty = (obj: TProperty) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       properties: [...prevFormData.properties, obj],
     }));
-
   };
 
   const deleteProperty = (id: string) => {
@@ -74,11 +83,14 @@ export default function Home() {
             setRequired={setRequired}
             properties={formData.properties}
             setProperties={setProperties}
+            updateProperty={updateProperty}
           />
         </div>
 
         <div className="h-screen col-span-2 p-3 px-0">
-          <div className="w-full h-full border rounded-md"></div>
+          <ScrollArea className="w-full h-full p-4 max-h-full flex flex-col border rounded-md">
+            <Previewbox formData={formData} />
+          </ScrollArea>
         </div>
       </div>{" "}
     </DragDropContext>
