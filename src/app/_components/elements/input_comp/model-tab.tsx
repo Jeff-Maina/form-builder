@@ -74,7 +74,7 @@ const ValidationBox = ({
         <Input
           type={inputType}
           id="min"
-          placeholder="Min length"
+          placeholder={name}
           value={metricState}
           onChange={(e) => setMetric(e.target.value)}
         />

@@ -35,10 +35,10 @@ const InputCompSheet = ({
 
   return (
     <Sheet.Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-      <Sheet.SheetContent className="border-none p-2 shadow-none !max-w-xl">
+      <Sheet.SheetContent className="border-none p-2 shadow-none h-full  !max-w-xl">
         <Sheet.SheetTitle></Sheet.SheetTitle>
-        <ScrollArea className="w-full max-h-full h-full rounded overflow-hidden border border-neutral-300 ">
-          <div className="w-full h-full bg-white p-4 shadow-xl rounded overflow-hidden">
+        <ScrollArea className="w-full max-h-full h-full bg-white shadow-xl rounded overflow-hidden border border-neutral-300 ">
+          <div className="w-full min-h-full h-full bg-white p-4 rounded overflow-hidden">
             {/* ACTUAL TABS */}
 
             <Tabs.Tabs defaultValue="model" className="w-full">
