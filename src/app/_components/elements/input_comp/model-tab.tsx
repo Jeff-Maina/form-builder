@@ -62,6 +62,9 @@ const ValidationBox = ({
   const { name, errorMessage, metric } = validation;
   const [metricState, setMetric] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+
+  const inputType =
+    name === "Minimum length" || "Maximum length" ? "number" : "text";
   return (
     <div className="grid w-full items-center gap-2 relative">
       <Label className="text-neutral-600" htmlFor="max">
@@ -69,7 +72,7 @@ const ValidationBox = ({
       </Label>
       <div className="flex items-center gap-2">
         <Input
-          type="text"
+          type={inputType}
           id="min"
           placeholder="Min length"
           value={metricState}
