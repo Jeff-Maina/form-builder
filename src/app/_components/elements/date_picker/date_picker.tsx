@@ -26,6 +26,7 @@ const DatePicker = ({ item, deleteField }: TCompProps) => {
       deleteField={deleteField}
       id={item.id}
       setSheetOpen={setSheetOpen}
+      isSheetOpen={isSheetOpen}
     >
       <div className="grid w-full max-w-sm items-center gap-3 relative">
         <Label className="text-neutral-600">
