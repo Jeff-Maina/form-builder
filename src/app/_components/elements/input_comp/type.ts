@@ -8,7 +8,7 @@ type TFieldFunctions = {
     setDefaultValue: (value: string | number | undefined) => void;
     setDescription: (value: string) => void;
     setPlaceholder: (value: string) => void;
-    setIsRequired: () => void;nip
+    setIsRequired: () => void;
     setIsDisabled: () => void;
     setValidations: (obj: TValidation) => void
 }

@@ -12,6 +12,8 @@ const SwitchComp = ({ item, deleteField }: TCompProps) => {
     <EditComp
       deleteField={deleteField}
       id={item.id}
+      isSheetOpen={isSheetOpen}
+
       setSheetOpen={setSheetOpen}
     >
       <div>SwitchComp</div>

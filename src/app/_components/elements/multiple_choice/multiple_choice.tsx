@@ -12,6 +12,8 @@ const Multiplechoice = ({ item, deleteField }: TCompProps) => {
     <EditComp
       deleteField={deleteField}
       id={item.id}
+      isSheetOpen={isSheetOpen}
+
       setSheetOpen={setSheetOpen}
     >
       <div>Multiplechoice</div>

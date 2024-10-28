@@ -14,6 +14,7 @@ const DropdownComp = ({ item, deleteField }: TCompProps) => {
     <EditComp
       deleteField={deleteField}
       id={item.id}
+      isSheetOpen={isSheetOpen}
       setSheetOpen={setSheetOpen}
     >
       <div className="grid w-full max-w-sm items-center gap-3 relative">

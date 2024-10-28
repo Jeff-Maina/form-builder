@@ -13,6 +13,8 @@ const CheckboxComp = ({ item, deleteField }: TCompProps) => {
       deleteField={deleteField}
       id={item.id}
       setSheetOpen={setSheetOpen}
+      isSheetOpen={isSheetOpen}
+
     >
       <div>checkboxComp</div>
     </EditComp>
