@@ -7,7 +7,7 @@ type TJsonPreview = {
 
 const JSONPreview = ({ formData }: { formData: TFormData }) => {
   return (
-    <ScrollArea className="max-h-[90vh] flex flex-col overflow-x-auto">
+    <ScrollArea className="max-h-[90vh] flex flex-col p-4 overflow-x-auto">
       <pre className="whitespace-pre-wrap font-mono ">
         {JSON.stringify(formData, null, 2)}
       </pre>

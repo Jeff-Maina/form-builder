@@ -8,19 +8,19 @@ type TPreviewProps = {
 const Previewbox = ({ formData }: TPreviewProps) => {
   return (
     <div className="h-full w-full">
-      <Tabs defaultValue="account" className="w-full">
+      <Tabs defaultValue="json" className="w-full">
         <TabsList className="w- grid grid-cols-3">
-          <TabsTrigger
-            className="data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
-            value="preview"
-          >
-            Preview
-          </TabsTrigger>
           <TabsTrigger
             className="data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
             value="json"
           >
             JSON
+          </TabsTrigger>
+          <TabsTrigger
+            className="data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
+            value="preview"
+          >
+            Preview
           </TabsTrigger>
           <TabsTrigger
             className="data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
