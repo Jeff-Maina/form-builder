@@ -92,7 +92,7 @@ const getSourceCode = (formData: TFormData) => {
       component: "dropdown",
       primitives: ["DropdownMenu"],
     },
-    multiple_choice: {
+    multichoice: {
       component: "radio-group",
       primitives: ["RadioGroup"],
     },
@@ -111,6 +111,9 @@ const getSourceCode = (formData: TFormData) => {
   const elementImports = removeDuplicates(
     FormProperties.map((prop) => {
       const element = formImports[prop.type];
+
+      if (prop.type === "linebreak") return;
+
       if (prop.type.includes("input")) {
         return `import { Input } from "@/components/ui/input"; \n`;
       } else {
