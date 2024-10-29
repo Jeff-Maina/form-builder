@@ -1,7 +1,7 @@
 import { TFormData } from "@/app/types";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
 import { createHighlighter } from "shiki";
+import Codeblock from "./Codeblock";
 
 type TCodePreviewProps = {
   formData: TFormData;
@@ -59,34 +59,7 @@ export default Previewbox;
 `;
 
 const CodePreview = ({ formData }: TCodePreviewProps) => {
-  const [highlightedCode, setHighlightedCode] = useState<string | null>(null);
-
-  useEffect(() => {
-    const loadHighlighter = async () => {
-      const highlighter = await createHighlighter({
-        themes: ["vitesse-dark"],
-        langs: ["typescript"],
-      });
-
-      const code = highlighter.codeToHtml(formCode, {
-        theme: "vitesse-dark",
-        lang: "typescript",
-      });
-
-      setHighlightedCode(code);
-    };
-
-    loadHighlighter();
-  }, []);
-
-  if (!highlightedCode) return <p>Loading...</p>; // Optional: Add a loading state
-
-  return (
-    <div
-      className="w-full h-full overflow-auto p-4 border rounded-md"
-      dangerouslySetInnerHTML={{ __html: highlightedCode }}
-    />
-  );
+  return <Codeblock lang="typescript" formCode={formCode} />;
 };
 
 export default CodePreview;
