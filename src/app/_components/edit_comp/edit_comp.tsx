@@ -47,7 +47,7 @@ const EditComp = ({
       </div>
     </div>
   ) : (
-    <div className="p-4">{children}</div>
+    <div className="px-4">{children}</div>
   );
 };
 

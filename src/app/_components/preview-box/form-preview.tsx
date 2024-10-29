@@ -16,7 +16,8 @@ const FormPreview = ({
   setProperties,
   updateProperty,
 }: TFormPreviewProps) => {
-  const { properties, description, title } = formData;
+  const { properties, description, title, hideDescription, hideTitle } =
+    formData;
   const [localProperties, setLocalProperties] = useState(formData.properties);
 
   useEffect(() => {
@@ -25,14 +26,16 @@ const FormPreview = ({
 
   return (
     <ScrollArea className="max-h-[90vh] flex flex-col py-4 pr-4 overflow-x-auto">
-      <div className=" bg-white border py-4 min-h-96 max-w-lg rounded-md !mx-auto">
+      <div className=" bg-white border py-4 min-h-96 max-w-lg rounded-md !mx-auto flex flex-col gap-6">
         <div className="flex flex-col gap-2 px-6">
-          <h1 className="text-xl font-bold tracking-tight">Login </h1>
-          <p className="text-sm text-neutral-500">
-            Enter your email below to login to your account
-          </p>
+          {hideTitle || (
+            <h1 className="text-xl font-bold tracking-tight">{title} </h1>
+          )}{" "}
+          {hideDescription || (
+            <p className="text-sm text-neutral-500">{description} </p>
+          )}
         </div>
-        <div className="p-2">
+        <div className="p-2 flex flex-col gap-4">
           {localProperties.map((prop, index) => {
             const Component = ElementsObj[prop.type];
             return (

@@ -47,6 +47,8 @@ type TProperty = {
 type TFormData = {
   title: string;
   description: string;
+  hideDescription: boolean;
+  hideTitle: boolean;
   required: string[];
   properties: TProperty[];
 };
