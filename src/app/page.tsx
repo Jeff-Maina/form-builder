@@ -67,10 +67,6 @@ export default function Home() {
     }));
   };
 
-  useEffect(() => {
-    console.log(formData); // Logs the updated formData
-  }, [formData]);
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className=" max-w-[110rem] m-auto w-full lg:h-screen grid grid-cols-5 bg-grid">

@@ -8,6 +8,7 @@ type TEditCompProps = {
   children: JSX.Element;
   isSheetOpen: boolean;
   id: string;
+  isPreview?: boolean;
 };
 
 const EditComp = ({
@@ -16,8 +17,9 @@ const EditComp = ({
   children,
   id,
   isSheetOpen,
+  isPreview,
 }: TEditCompProps) => {
-  return (
+  return isPreview === false ? (
     <div
       className={cn(
         "p-4  rounded-md relative group/card transition-all border border-transparent",
@@ -44,6 +46,8 @@ const EditComp = ({
         </Button>{" "}
       </div>
     </div>
+  ) : (
+    <div className="p-4">{children}</div>
   );
 };
 

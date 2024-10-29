@@ -17,6 +17,11 @@ const FormPreview = ({
   updateProperty,
 }: TFormPreviewProps) => {
   const { properties, description, title } = formData;
+  const [localProperties, setLocalProperties] = useState(formData.properties);
+
+  useEffect(() => {
+    setLocalProperties(properties);
+  }, [formData]);
 
   return (
     <ScrollArea className="max-h-[90vh] flex flex-col py-4 pr-4 overflow-x-auto">
@@ -28,7 +33,7 @@ const FormPreview = ({
           </p>
         </div>
         <div className="p-2">
-          {properties.map((prop, index) => {
+          {localProperties.map((prop, index) => {
             const Component = ElementsObj[prop.type];
             return (
               <Component
@@ -36,6 +41,7 @@ const FormPreview = ({
                 setProperties={setProperties}
                 deleteField={deleteField}
                 updateProperty={updateProperty}
+                isPreview={true}
                 item={prop}
               />
             );

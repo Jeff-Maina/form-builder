@@ -88,6 +88,7 @@ const InputComp = ({
   deleteField,
   inputType,
   updateProperty,
+  isPreview = false,
 }: TCompProps & { inputType: string }) => {
   const [isSheetOpen, setSheetOpen] = React.useState(false);
 
@@ -156,7 +157,20 @@ const InputComp = ({
     },
   };
 
-  const [isEditing, setEditing] = React.useState(false);
+  // rerender component when the item changes
+
+  React.useEffect(() => {
+    setHideLabel(item.isLabelHidden);
+    setHidePlaceholder(item.isPlaceholderHidden);
+    setHideDescription(item.isDescriptionHidden);
+    setLabel(item.label);
+    setDefaultValue(item.defaultValue);
+    setDescription(item.description);
+    setPlaceholder(item.placeholder);
+    setIsRequired(item.required);
+    setIsDisabled(item.disabled);
+    setValidationsState(item.validations);
+  }, [item]);
 
   return (
     <>
@@ -164,6 +178,7 @@ const InputComp = ({
         isSheetOpen={isSheetOpen}
         deleteField={deleteField}
         id={item.id}
+        isPreview={isPreview}
         setSheetOpen={setSheetOpen}
       >
         <div className="grid w-full max-w-sm items-center gap-2 relative">

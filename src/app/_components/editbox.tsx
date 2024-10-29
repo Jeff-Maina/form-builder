@@ -27,7 +27,7 @@ const Editbox = ({
   setRequired,
   deleteField,
   setProperties,
-  updateProperty
+  updateProperty,
 }: TEditboxProps) => {
   const onDragEnd = (result: any) => {
     if (!result.destination) {
@@ -85,16 +85,14 @@ const Editbox = ({
                               : "border-dashed border-neutral-300 hover:border-neutral-500"
                           )}
                         >
-                          {Component ? (
-                            <Component
-                              item={item}
-                              deleteField={deleteField}
-                              inputType={itemTypes[item.type]}
-                              setProperties={setProperties}
-                              updateProperty={updateProperty}
-                            />
-                          ) : null}
-                          {}
+                          <Component
+                            item={item}
+                            deleteField={deleteField}
+                            inputType={itemTypes[item.type]}
+                            setProperties={setProperties}
+                            isPreview={false}
+                            updateProperty={updateProperty}
+                          />
                         </div>
                       )}
                     </Draggable>
