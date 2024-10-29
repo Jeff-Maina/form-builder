@@ -33,8 +33,6 @@ const InputCompSheet = ({
   FieldProperties,
   updateProperties,
 }: TSheetProps) => {
-  console.log(FieldProperties);
-
   return (
     <Sheet.Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
       <Sheet.SheetContent className="border-none p-2 shadow-none h-full  !max-w-xl">

@@ -7,6 +7,7 @@ import { DragDropContext } from "@hello-pangea/dnd";
 import { TFormData, TProperty } from "./types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Previewbox from "./_components/preview-box/preview-box";
+import FormPreview from "./_components/preview-box/form-preview";
 
 export default function Home() {
   const onDragEnd = useCallback(() => {
@@ -88,7 +89,14 @@ export default function Home() {
         </div>
 
         <div className="h-screen col-span-2 p-3 px-0">
-          <Previewbox formData={formData} />
+          <Previewbox formData={formData}>
+            <FormPreview
+              formData={formData}
+              setProperties={setProperties}
+              deleteField={deleteProperty}
+              updateProperty={updateProperty}
+            />
+          </Previewbox>
         </div>
       </div>{" "}
     </DragDropContext>
