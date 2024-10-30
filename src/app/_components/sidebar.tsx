@@ -55,7 +55,8 @@ const Sidebar = ({ addProperty }: TSidebarProps) => {
                   onClick={() => {
                     addNewProperty(element.type, element.label);
                   }}
-                  className="text-sm flex p-2 pl-4 border w-full rounded items-center gap-4 bg-white  font-medium text-neutral-600  hover:bg-black hover:border-black  hover:text-white transition-all duration-100"
+                  disabled={!element.completed}
+                  className="text-sm flex p-2 pl-4 border w-full rounded items-center gap-4 bg-white  font-medium text-neutral-600  hover:bg-black hover:border-black  hover:text-white transition-all duration-100 disabled:hover:bg-neutral-200 disabled:cursor-not-allowed disabled:border-neutral-300 disabled:text-neutral-400"
                 >
                   {element.icon}
                   {element.label}

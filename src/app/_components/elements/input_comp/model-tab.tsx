@@ -45,7 +45,7 @@ const fieldValidations = [
 type TModelProps = {
   inputType: string;
   FieldFunctions: TFieldFunctions;
-  FieldProperties: TProperty;
+  FieldProperties: TProperty & { inputType: string };
 };
 
 type TValidationBoxProps = {
@@ -130,6 +130,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
     validations,
     required,
     disabled,
+    inputType,
   } = FieldProperties;
 
   return (
@@ -232,7 +233,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
               Default value
             </Label>
             <Input
-              type="text"
+              type={inputType}
               id="field_label"
               placeholder="Default value"
               value={defaultValue}

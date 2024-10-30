@@ -60,74 +60,156 @@ export default Previewbox;
 
 const removeDuplicates = (data: any) => [...new Set(data)];
 
+const formImports: Record<
+  string,
+  {
+    component: string;
+    primitives: string[];
+  }
+> = {
+  input: {
+    component: "input",
+    primitives: ["Input"],
+  },
+  range: {
+    component: "range",
+    primitives: ["Range"],
+  },
+  text_box: {
+    component: "text-area",
+    primitives: ["Textarea"],
+  },
+  date_picker: {
+    component: "calendar",
+    primitives: ["Calendar"],
+  },
+  dropdown: {
+    component: "dropdown",
+    primitives: ["DropdownMenu"],
+  },
+  multichoice: {
+    component: "radio-group",
+    primitives: ["RadioGroup"],
+  },
+  checkbox: {
+    component: "checkbox",
+    primitives: ["Checkbox"],
+  },
+  switch: {
+    component: "switch",
+    primitives: ["Switch"],
+  },
+};
+
+const FormFields = {};
 const getSourceCode = (formData: TFormData) => {
   const FormProperties = formData.properties;
 
-  console.log(FormProperties);
-
-  const formImports: Record<
-    string,
-    {
-      component: string;
-      primitives: string[];
-    }
-  > = {
-    input: {
-      component: "input",
-      primitives: ["Input"],
-    },
-    range: {
-      component: "range",
-      primitives: ["Range"],
-    },
-    text_box: {
-      component: "text-area",
-      primitives: ["Textarea"],
-    },
-    date_picker: {
-      component: "calendar",
-      primitives: ["Calendar"],
-    },
-    dropdown: {
-      component: "dropdown",
-      primitives: ["DropdownMenu"],
-    },
-    multichoice: {
-      component: "radio-group",
-      primitives: ["RadioGroup"],
-    },
-    checkbox: {
-      component: "checkbox",
-      primitives: ["Checkbox"],
-    },
-    switch: {
-      component: "switch",
-      primitives: ["Switch"],
-    },
-  };
-
-  // imports
-
+  // Helper: Remove duplicate imports
   const elementImports = removeDuplicates(
     FormProperties.map((prop) => {
       const element = formImports[prop.type];
-
-      if (prop.type === "linebreak") return;
+      if (prop.type === "linebreak") return "";
 
       if (prop.type.includes("input")) {
-        return `import { Input } from "@/components/ui/input"; \n`;
+        return `
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+`;
       } else {
-        return `import { ${element.primitives
-          .map((primitive) => `${primitive} `)
-          .join(", ")} } from "@/components/ui/${element.component}"; \n`;
+        const primitives = element.primitives.join(", ");
+        return `import { ${primitives} } from "@/components/ui/${element.component}";`;
       }
     })
-  ).join("");
+  )
+    .filter(Boolean)
+    .join("\n");
 
-  // validations
-  const validations = ``;
+  const generateFormFields = () =>
+    FormProperties.map((prop) => {
+      const name = prop.label.toLowerCase().split(" ").join("");
 
-  return `${elementImports}`;
+      return `
+        <FormField
+          control={form.control}
+          name="${name}"
+          render={({ field }) => (
+            <FormItem>
+             ${prop.isLabelHidden ? "" : `<FormLabel>${prop.label}</FormLabel>`}
+              <FormControl>
+                <Input placeholder="${prop.placeholder}" {...field} />
+              </FormControl>
+            ${
+              prop.isDescriptionHidden
+                ? ""
+                  : `  <FormDescription>
+                ${prop.description}
+              </FormDescription>`
+            }
+              <FormMessage />
+            </FormItem>
+          )}
+        />`;
+    })
+      .join("")
+      .trim();
+
+  const defaultValues = removeDuplicates(
+    FormProperties.filter((prop) => prop.defaultValue !== "")
+      .map((prop) => {
+        const name = prop.label.toLowerCase().split(" ").join("");
+        const defaultValue = prop.type.includes("number") ? prop.defaultValue : `"${prop.defaultValue}"`
+        return ` ${name}: ${defaultValue}`;
+      })
+      
+  );
+
+  const formSchema = `
+const formSchema = z.object({});
+`;
+
+  // Form component template
+  const component = `
+export function Form() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      ${defaultValues}
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values); // Replace with your logic
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        ${generateFormFields()}
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
+}
+`;
+
+  // Final output with proper formatting
+  const output = `
+${elementImports}
+${formSchema}
+${component}
+`;
+
+  return output.trim(); // Remove extra spaces from the beginning and end
 };
 
 const CodePreview = ({ formData }: TCodePreviewProps) => {

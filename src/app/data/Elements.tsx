@@ -27,6 +27,7 @@ type TElement = {
   label: string;
   icon: React.ReactNode;
   type: string;
+  completed: boolean;
 };
 
 export const elements: TElement[] = [
@@ -34,66 +35,79 @@ export const elements: TElement[] = [
     label: "Text Input",
     icon: <CaseSensitive size={16} />,
     type: "text_input",
+    completed: true,
   },
   {
     label: "Email Input",
     icon: <Mail size={16} />,
     type: "email_input",
+    completed: true,
   },
   {
     label: "Number Input",
     icon: <Plus size={16} />,
     type: "number_input",
+    completed: true,
   },
   {
     label: "Url Input",
     icon: <Link size={16} />,
     type: "url_input",
+    completed: true,
   },
   {
     label: "Password",
     icon: <Lock size={16} />,
     type: "password_input",
+    completed: true,
   },
   {
     label: "Textbox",
     icon: <BoxSelect size={16} />,
     type: "text_box",
+    completed: false,
   },
   {
     label: "Date picker",
     icon: <Calendar size={16} />,
     type: "date_picker",
+    completed: false,
   },
   {
     label: "Range",
     icon: <SlidersHorizontal size={16} />,
     type: "range",
+    completed: false,
   },
   {
     label: "Dropdown",
     icon: <ChevronDown size={16} />,
     type: "dropdown",
+    completed: false,
   },
   {
     label: "Muiltiple Choice",
     icon: <List size={16} />,
     type: "multichoice",
+    completed: false,
   },
   {
     label: "Checkbox",
     icon: <CircleCheck size={16} />,
     type: "checkbox",
+    completed: false,
   },
   {
     label: "Linebreak",
     icon: <MoveVertical size={16} />,
     type: "linebreak",
+    completed: false,
   },
   {
     label: "Switch",
     icon: <ToggleLeft size={16} />,
     type: "switch",
+    completed: false,
   },
 ];
 

@@ -20,7 +20,7 @@ type TSheetProps = {
   item: TCompProps["item"];
   inputType: string;
   FieldFunctions: TFieldFunctions;
-  FieldProperties: TProperty;
+  FieldProperties: TProperty & { inputType: string };
   updateProperties: () => void;
 };
 
@@ -124,6 +124,7 @@ const InputComp = ({
     isPlaceholderHidden,
     validations,
     isLabelHidden,
+    inputType,
   };
 
   const FieldFunctions = {
