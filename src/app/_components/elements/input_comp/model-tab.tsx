@@ -60,11 +60,11 @@ const ValidationBox = ({
   removeValidation,
 }: TValidationBoxProps) => {
   const { name, errorMessage, metric } = validation;
-  const [metricState, setMetric] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [metricState, setMetric] = useState(metric);
+  const [errorMsg, setErrorMsg] = useState(errorMessage);
 
   const inputType =
-    name === "Minimum length" || "Maximum length" ? "number" : "text";
+    name === "Minimum length" || name === "Maximum length" ? "number" : "text";
   return (
     <div className="grid w-full items-center gap-2 relative">
       <Label className="text-neutral-600" htmlFor="max">
@@ -76,7 +76,14 @@ const ValidationBox = ({
           id="min"
           placeholder={name}
           value={metricState}
-          onChange={(e) => setMetric(e.target.value)}
+          onChange={(e) => {
+            setMetric(e.target.value);
+            if (inputType === "number") {
+              validation.metric = Number(e.target.value);
+            } else {
+              validation.metric = e.target.value;
+            }
+          }}
         />
         <Button
           onClick={() => removeValidation()}
@@ -97,7 +104,10 @@ const ValidationBox = ({
             <Textarea
               placeholder="Enter minlength error message"
               value={errorMsg}
-              onChange={(e) => setErrorMsg(e.target.value)}
+              onChange={(e) => {
+                setErrorMsg(e.target.value);
+                validation.errorMessage = e.target.value;
+              }}
             />
           </Collapsible.CollapsibleContent>
         </Collapsible.Collapsible>
@@ -297,12 +307,6 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
               className="w-[300px]"
             >
               {fieldValidations.map((val, index) => (
-                // <DropdownMenu.DropdownMenuItem
-                //   onClick={() => setValidations(val)}
-                //   className="p-2 hover:bg-neutral-200/60 text-sm rounded-md cursor-pointer"
-                // >
-                //   {val.name}
-                // </DropdownMenu.DropdownMenuItem>
                 <div
                   className="p-2 flex items-center gap-2 hover:bg-neutral-100 "
                   key={index}
