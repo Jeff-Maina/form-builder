@@ -161,7 +161,7 @@ import {
             <FormItem>
              ${prop.isLabelHidden ? "" : `<FormLabel>${prop.label}</FormLabel>`}
               <FormControl>
-                <Input placeholder="${prop.placeholder}" {...field} />
+                <Input type='${prop.type.split("_")[0]}' placeholder="${prop.placeholder}" {...field} />
               </FormControl>
             ${
               prop.isDescriptionHidden
