@@ -151,7 +151,7 @@ import {
             ${
               prop.isDescriptionHidden
                 ? ""
-                  : `  <FormDescription>
+                : `  <FormDescription>
                 ${prop.description}
               </FormDescription>`
             }
@@ -163,19 +163,34 @@ import {
       .join("")
       .trim();
 
-  const defaultValues = removeDuplicates(
-    FormProperties.filter((prop) => prop.defaultValue !== "")
-      .map((prop) => {
-        const name = prop.label.toLowerCase().split(" ").join("");
-        const defaultValue = prop.type.includes("number") ? prop.defaultValue : `"${prop.defaultValue}"`
-        return ` ${name}: ${defaultValue}`;
-      })
-      
+  const formatProp = (val: string) => val.toLowerCase().split(" ").join("");
+
+
+
+  const requiredFields = FormProperties.filter((prop) => prop.required);
+  const maxLength = Math.max(
+    ...requiredFields.map((field) => formatProp(field.label).length)
   );
 
-  const formSchema = `
-const formSchema = z.object({});
-`;
+  const formSchema =
+  `const formSchema = z
+  .object({})
+  .required({
+    ${requiredFields
+      .map((field) => `  ${formatProp(field.label)}: true`)
+      .join(";\n    ")}
+  })`;
+
+
+const defaultValues = removeDuplicates(
+  FormProperties.filter((prop) => prop.defaultValue !== "").map((prop) => {
+    const name = prop.label.toLowerCase().split(" ").join("");
+    const defaultValue = prop.type.includes("number")
+      ? prop.defaultValue
+      : `"${prop.defaultValue}"`;
+    return ` ${name}: ${defaultValue}`;
+  })
+).join(";\n      ");
 
   // Form component template
   const component = `
@@ -203,7 +218,11 @@ export function Form() {
 `;
 
   // Final output with proper formatting
-  const output = `
+  const output = `"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 ${elementImports}
 ${formSchema}
 ${component}
