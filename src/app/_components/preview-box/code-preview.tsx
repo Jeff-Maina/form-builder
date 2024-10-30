@@ -1,7 +1,22 @@
-import { TFormData } from "@/app/types";
+import { TFormData, TProperty, TValidation } from "@/app/types";
 import { useEffect, useState } from "react";
 import { createHighlighter } from "shiki";
 import Codeblock from "./Codeblock";
+
+import { z } from "zod";
+
+const formSchema = z
+  .object({
+    emailinput: z
+      .string()
+      .email()
+      .max(1000, { message: "maximum length" })
+      .includes("jeff", { message: "contains jeff" })
+      .endsWith(".com", { message: "ends with .com" }),
+  })
+  .required({
+    emailinput: true,
+  });
 
 type TCodePreviewProps = {
   formData: TFormData;
@@ -165,32 +180,67 @@ import {
 
   const formatProp = (val: string) => val.toLowerCase().split(" ").join("");
 
+  const getZodValidation = (prop: TProperty) => {
+    const dataType = prop.type.includes("number") ? "number()" : "string()";
+    let minLength = "";
+    let maxLength = "";
+    let email = prop.type.includes("email") ? "email()" : "";
+    let contains = "";
+    let endsWith = "";
 
+    const getValidations = prop.validations?.map((validation) => {
+      if (validation.name === "Minimum Length") {
+        minLength = `min(${validation.metric}, { message: "${validation.errorMessage}"})`;
+      }
+      if (validation.name === "Maximum length") {
+        maxLength = `max(${validation.metric}, { message: "${validation.errorMessage}"})`;
+      }
+      if (validation.name === "Contains") {
+        contains = `includes("${validation.metric}", { message: "${validation.errorMessage}"})`;
+      }
+      if (validation.name === "Ends with") {
+        endsWith = `endsWith("${validation.metric}", { message: "${validation.errorMessage}" })`;
+      }
 
+      return "";
+    });
+
+    const validations = [
+      dataType,
+      email,
+      minLength,
+      maxLength,
+      contains,
+      endsWith,
+    ].filter(Boolean);
+
+    return `${formatProp(prop.label)}: z.${validations.join(
+      "\n        ."
+    )}`;
+  };
+
+  const validations = FormProperties.map((prop) => getZodValidation(prop));
   const requiredFields = FormProperties.filter((prop) => prop.required);
-  const maxLength = Math.max(
-    ...requiredFields.map((field) => formatProp(field.label).length)
-  );
 
-  const formSchema =
-  `const formSchema = z
-  .object({})
+  const formSchema = `const formSchema = z
+  .object({
+      ${validations.join(";\n      ")}
+  })
   .required({
     ${requiredFields
       .map((field) => `  ${formatProp(field.label)}: true`)
       .join(";\n    ")}
   })`;
 
-
-const defaultValues = removeDuplicates(
-  FormProperties.filter((prop) => prop.defaultValue !== "").map((prop) => {
-    const name = prop.label.toLowerCase().split(" ").join("");
-    const defaultValue = prop.type.includes("number")
-      ? prop.defaultValue
-      : `"${prop.defaultValue}"`;
-    return ` ${name}: ${defaultValue}`;
-  })
-).join(";\n      ");
+  const defaultValues = removeDuplicates(
+    FormProperties.filter((prop) => prop.defaultValue !== "").map((prop) => {
+      const name = prop.label.toLowerCase().split(" ").join("");
+      const defaultValue = prop.type.includes("number")
+        ? prop.defaultValue
+        : `"${prop.defaultValue}"`;
+      return ` ${name}: ${defaultValue}`;
+    })
+  ).join(";\n      ");
 
   // Form component template
   const component = `
@@ -203,7 +253,7 @@ export function Form() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values); // Replace with your logic
+    console.log(values); 
   }
 
   return (

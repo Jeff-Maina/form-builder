@@ -88,6 +88,7 @@ export default function Home() {
                 <Input
                   className="text-xl font-bold tracking-tight border border-transparent !ring-0 !outline-none hover:bg-neutral-100 "
                   value={formData.title}
+                  type="text"
                   placeholder="Form title"
                   disabled={formData.hideTitle}
                   onChange={(e) => {
