@@ -31,6 +31,7 @@ const Sidebar = ({ addProperty }: TSidebarProps) => {
       isDescriptionHidden: false,
       isPlaceholderHidden: false,
       defaultValue: "",
+    
     };
     addProperty(propObj);
   };

@@ -192,7 +192,7 @@ const InputComp = ({
         setSheetOpen={setSheetOpen}
       >
         <div className="grid w-full max-w-sm items-center gap-2 relative">
-          {!isLabelHidden && (
+          {!isLabelHidden && !isPreview && (
             <Label htmlFor="input">
               {label}{" "}
               {isRequired ? <span className="text-red-500">*</span> : null}
@@ -206,8 +206,9 @@ const InputComp = ({
               placeholder={placeholder}
               disabled={isDisabled}
               onChange={(e) => setDefaultValue(e.target.value)}
+        
             />
-            {!isDescriptionHidden && (
+            {!isDescriptionHidden && !isPreview && (
               <small className="text-muted-foreground">{description}</small>
             )}
             {/* <small className="text-red-600">This is an error message</small> */}

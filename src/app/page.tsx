@@ -44,7 +44,7 @@ export default function Home() {
     }
   };
 
-  const setProperties = (properties: TProperty[]) => {
+  const setFormProperties = (properties: TProperty[]) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       properties: properties,
@@ -163,7 +163,7 @@ export default function Home() {
             deleteField={deleteProperty}
             setRequired={setRequired}
             properties={formData.properties}
-            setProperties={setProperties}
+            setFormProperties={setFormProperties}
             updateProperty={updateProperty}
           />
         </div>
@@ -172,7 +172,7 @@ export default function Home() {
           <Previewbox formData={formData}>
             <FormPreview
               formData={formData}
-              setProperties={setProperties}
+              setFormProperties={setFormProperties}
               deleteField={deleteProperty}
               updateProperty={updateProperty}
             />
