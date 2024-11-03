@@ -189,9 +189,12 @@ const FormPreview = ({
             <p className="text-sm text-neutral-500">{description} </p>
           )}
         </div>
-        <div className="p-2 flex flex-col gap-4">
+        <div className="p-2 pt-0 flex flex-col gap-4">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-4 px-4"
+            >
               {properties.map((prop, index) => {
                 const name = formatProp(prop.label);
                 const typeMap: Record<string, string> = {
@@ -209,7 +212,9 @@ const FormPreview = ({
                     name={name}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{prop.label}</FormLabel>
+                        {!prop.isLabelHidden && (
+                          <FormLabel>{prop.label}</FormLabel>
+                        )}
                         <FormControl>
                           <Input
                             type={typeMap[prop.type]}
@@ -217,16 +222,20 @@ const FormPreview = ({
                             {...field}
                           />
                         </FormControl>
-                        {prop.type}
-                        <FormDescription>{prop.description}</FormDescription>
+                        {!prop.isDescriptionHidden && (
+                          <FormDescription>{prop.description}</FormDescription>
+                        )}{" "}
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 );
               })}
-
-              <Button type="submit">Submit</Button>
+              {properties.length > 0 && (
+                <Button type="submit" className="w-32 rounded" size={"sm"}>
+                  Submit
+                </Button>
+              )}{" "}
             </form>
           </Form>
         </div>
