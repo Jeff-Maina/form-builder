@@ -3,7 +3,7 @@ import { TFormData, TProperty, TValidation } from "@/app/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { ZodTypeAny, z } from "zod";
+import { ZodString, ZodTypeAny, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -83,43 +83,57 @@ function generateZodSchema(formItems: TProperty[]) {
     const inputName = formatProp(item.label);
     const inputType = item.type;
     // Determine the base schema based on field type
-    // let fieldSchema = inputType.includes("number")
-    //   ? z.coerce.number()
-    //   : z.string();
-
-    let fieldSchema = z.string();
+    let fieldSchema = inputType.includes("number")
+      ? z.coerce.number()
+      : z.string();
 
     // Apply validations based on TValidation
     item.validations?.forEach((rule) => {
-      
       const options = {
         message: rule.errorMessage ? rule.errorMessage : undefined,
       };
 
-      switch (rule.name) {
-        case "Minimum length":
-          fieldSchema = fieldSchema.min(rule.metric as number, options);
-          break;
-        case "Maximum length":
-          fieldSchema = fieldSchema.max(rule.metric as number, options);
-          break;
-        case "Contains":
-          fieldSchema = fieldSchema.includes(rule.metric as string, options);
-          break;
-        case "Regex":
-          fieldSchema = fieldSchema.regex(
-            new RegExp(rule.metric as string),
-            options
-          );
-          break;
-        case "Email":
-          fieldSchema = fieldSchema.email(options);
-          break;
-        case "Url":
-          fieldSchema = fieldSchema.url(options);
-          break;
-        default:
-          throw new Error("Unsupported validation type: " + rule.name);
+      if (inputType.includes("input") && !inputType.includes("number")) {
+        switch (rule.name) {
+          case "Minimum length":
+            fieldSchema = fieldSchema.min(rule.metric as number, options);
+            break;
+          case "Maximum length":
+            fieldSchema = fieldSchema.max(rule.metric as number, options);
+            break;
+          case "Contains":
+            fieldSchema = (fieldSchema as ZodString).includes(
+              rule.metric as string,
+              options
+            );
+            break;
+          // case "Regex":
+          //   fieldSchema = (fieldSchema as ZodString).regex(
+          //     new RegExp(rule.metric as string),
+          //     options
+          //   );
+          //   break;
+          case "Starts with":
+            fieldSchema = (fieldSchema as ZodString).startsWith(
+              rule.metric as string,
+              options
+            );
+            break;
+          case "Ends with":
+            fieldSchema = (fieldSchema as ZodString).endsWith(
+              rule.metric as string,
+              options
+            );
+            break;
+          case "Length":
+            fieldSchema = (fieldSchema as ZodString).length(
+              rule.metric as number,
+              options
+            );
+            break;
+          default:
+            throw new Error("Unsupported validation type: " + rule.name);
+        }
       }
     });
 
@@ -180,6 +194,14 @@ const FormPreview = ({
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               {properties.map((prop, index) => {
                 const name = formatProp(prop.label);
+                const typeMap: Record<string, string> = {
+                  password_input: "password",
+                  text_input: "text",
+                  number_input: "number",
+                  email_input: "email",
+                  url_input: "url",
+                };
+
                 return (
                   <FormField
                     key={prop.id}
@@ -190,7 +212,7 @@ const FormPreview = ({
                         <FormLabel>{prop.label}</FormLabel>
                         <FormControl>
                           <Input
-                            type="text"
+                            type={typeMap[prop.type]}
                             placeholder={prop.placeholder}
                             {...field}
                           />

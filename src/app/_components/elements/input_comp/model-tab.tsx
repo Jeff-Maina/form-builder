@@ -42,10 +42,15 @@ const textFieldValidations = [
     metric: "",
   },
   {
-    name: "Regex",
+    name: "Starts with",
     errorMessage: "",
     metric: "",
   },
+  // {
+  //   name: "Regex",
+  //   errorMessage: "",
+  //   metric: "",
+  // },
   {
     name: "Length",
     errorMessage: "",
@@ -111,7 +116,7 @@ const ValidationBox = ({
       </Label>
       <div className="flex items-center gap-2">
         <Input
-          type={inputType}
+          type={inputType === "password" ? "text" : inputType}
           id="min"
           placeholder={name}
           value={metricState}
@@ -183,7 +188,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
     disabled,
     inputType,
   } = FieldProperties;
-  
+
   const activeValidations = inputType.includes("number")
     ? numberFieldValidations
     : textFieldValidations;
