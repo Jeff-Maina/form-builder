@@ -213,7 +213,7 @@ const FormPreview = ({
                     render={({ field }) => (
                       <FormItem>
                         {!prop.isLabelHidden && (
-                          <FormLabel>{prop.label}</FormLabel>
+                          <FormLabel>{prop.label} {prop.required && <span className="text-red-500">*</span>}</FormLabel>
                         )}
                         <FormControl>
                           <Input

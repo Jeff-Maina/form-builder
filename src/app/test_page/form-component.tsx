@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,20 +18,24 @@ import {
 
 const formSchema = z
   .object({
-    urlinput: z.string().url(),
+      numberinput: z.coerce.number(),
+      textinput: z.string()
   })
   .required({
-    urlinput: true,
-  });
+      numberinput: true,
+      textinput: true
+  })
 
 export default function FormComponent() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      
+    },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.log(values); 
   }
 
   return (
@@ -39,14 +43,30 @@ export default function FormComponent() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="urlinput"
+          name="numberinput"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Url Input</FormLabel>
+             <FormLabel>Number Input</FormLabel>
               <FormControl>
-                <Input type="url" placeholder="Placeholder" {...field} />
+                <Input type='number' placeholder="Placeholder" {...field} />
               </FormControl>
-              <FormDescription>This is a description message</FormDescription>
+            
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="textinput"
+          render={({ field }) => (
+            <FormItem>
+             <FormLabel>Text Input</FormLabel>
+              <FormControl>
+                <Input type='text' placeholder="Placeholder" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is a description message
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
