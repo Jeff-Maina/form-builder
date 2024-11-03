@@ -92,6 +92,11 @@ const InputComp = ({
 }: TCompProps & { inputType: string }) => {
   const [isSheetOpen, setSheetOpen] = React.useState(false);
 
+  const toggleSheet = () => {
+    setSheetOpen((prev) => !prev);
+    updateChanges();
+  };
+
   // states;
   const [isLabelHidden, setHideLabel] = React.useState(item.isLabelHidden);
   const [isPlaceholderHidden, setHidePlaceholder] = React.useState(
@@ -160,7 +165,7 @@ const InputComp = ({
 
   // rerender component when the item changes
 
-  React.useEffect(() => {
+  const updateChanges = () => {
     setHideLabel(item.isLabelHidden);
     setHidePlaceholder(item.isPlaceholderHidden);
     setHideDescription(item.isDescriptionHidden);
@@ -171,6 +176,10 @@ const InputComp = ({
     setIsRequired(item.required);
     setIsDisabled(item.disabled);
     setValidationsState(item.validations);
+  };
+
+  React.useEffect(() => {
+    updateChanges();
   }, [item]);
 
   return (
@@ -210,7 +219,7 @@ const InputComp = ({
         item={item}
         inputType={inputType}
         isSheetOpen={isSheetOpen}
-        setSheetOpen={setSheetOpen}
+        setSheetOpen={toggleSheet}
         FieldProperties={FieldProperties}
         updateProperties={() => updateProperty(FieldProperties)}
         FieldFunctions={FieldFunctions}

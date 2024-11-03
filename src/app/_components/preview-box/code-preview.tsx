@@ -22,57 +22,6 @@ type TCodePreviewProps = {
   formData: TFormData;
 };
 
-const formCode = `
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import JSONPreview from "./json-preview";
-import { TFormData } from "@/app/types";
-import FormPreview from "./form-preview";
-import CodePreview from "./code-preview";
-
-type TPreviewProps = {
-  formData: TFormData;
-  children: React.ReactNode;
-};
-const Previewbox = ({ formData, children }: TPreviewProps) => {
-  return (
-    <div className="h-full w-full">
-      <Tabs defaultValue="preview" className="w-full">
-        <TabsList className="w- grid grid-cols-3">
-          <TabsTrigger
-            className="data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
-            value="preview"
-          >
-            Preview
-          </TabsTrigger>
-          <TabsTrigger
-            className="data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
-            value="json"
-          >
-            JSON
-          </TabsTrigger>
-          <TabsTrigger
-            className="data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
-            value="code"
-          >
-            code
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="preview">{children}</TabsContent>
-        <TabsContent value="json" className="w-full h-full">
-          <JSONPreview formData={formData} />
-        </TabsContent>
-        <TabsContent value="code">
-          <CodePreview formData={formData} />
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-};
-
-export default Previewbox;
-
-`;
-
 const removeDuplicates = (data: any) => [...new Set(data)];
 
 const formImports: Record<
@@ -161,7 +110,9 @@ import {
             <FormItem>
              ${prop.isLabelHidden ? "" : `<FormLabel>${prop.label}</FormLabel>`}
               <FormControl>
-                <Input type='${prop.type.split("_")[0]}' placeholder="${prop.placeholder}" {...field} />
+                <Input type='${prop.type.split("_")[0]}' placeholder="${
+        prop.placeholder
+      }" {...field} />
               </FormControl>
             ${
               prop.isDescriptionHidden
@@ -181,27 +132,39 @@ import {
   const formatProp = (val: string) => val.toLowerCase().split(" ").join("");
 
   const getZodValidation = (prop: TProperty) => {
-    const dataType = prop.type.includes("number") ? "number()" : "string()";
+    const dataType = prop.type.includes("number") ? "string().transform((value)=>parseInt(value, 10))" : "string()";
     let minLength = "";
     let maxLength = "";
     let email = prop.type.includes("email") ? "email()" : "";
     let contains = "";
     let endsWith = "";
+    let length = "";
+    let regex = "";
 
     const getValidations = prop.validations?.map((validation) => {
-      if (validation.name === "Minimum Length") {
-        minLength = `min(${validation.metric}, { message: "${validation.errorMessage}"})`;
-      }
-      if (validation.name === "Maximum length") {
-        maxLength = `max(${validation.metric}, { message: "${validation.errorMessage}"})`;
-      }
-      if (validation.name === "Contains") {
-        contains = `includes("${validation.metric}", { message: "${validation.errorMessage}"})`;
-      }
-      if (validation.name === "Ends with") {
-        endsWith = `endsWith("${validation.metric}", { message: "${validation.errorMessage}" })`;
-      }
+      const { name, metric, errorMessage = "Invalid input" } = validation;
+      const messageOption = errorMessage
+        ? `, { message: "${errorMessage.trim()}" }`
+        : "";
 
+      if (name === "Minimum length") {
+        minLength = `min(${metric}${messageOption})`;
+      }
+      if (name === "Maximum length") {
+        maxLength = `max(${metric}${messageOption})`;
+      }
+      if (name === "Contains") {
+        contains = `includes("${metric}"${messageOption})`;
+      }
+      if (name === "Ends with") {
+        endsWith = `endsWith("${metric}"${messageOption})`;
+      }
+      if (name === "Length") {
+        length = `length(${metric}${messageOption})`;
+      }
+      if (name === "Regex") {
+        regex = `regex(new RegExp("${metric})${messageOption}"))`;
+      }
       return "";
     });
 
@@ -212,11 +175,12 @@ import {
       maxLength,
       contains,
       endsWith,
+      length,
+      regex,
     ].filter(Boolean);
 
-    return `${formatProp(prop.label)}: z.${validations.join(
-      "\n        ."
-    )}`;
+
+    return `${formatProp(prop.label)}: z.${validations.join("\n        .")}`;
   };
 
   const validations = FormProperties.map((prop) => getZodValidation(prop));
@@ -224,12 +188,12 @@ import {
 
   const formSchema = `const formSchema = z
   .object({
-      ${validations.join(";\n      ")}
+      ${validations.join(",\n      ")}
   })
   .required({
     ${requiredFields
       .map((field) => `  ${formatProp(field.label)}: true`)
-      .join(";\n    ")}
+      .join(",\n    ")}
   })`;
 
   const defaultValues = removeDuplicates(
@@ -244,7 +208,7 @@ import {
 
   // Form component template
   const component = `
-export function Form() {
+export default function FormComponent() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -258,7 +222,7 @@ export function Form() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         ${generateFormFields()}
         <Button type="submit">Submit</Button>
       </form>

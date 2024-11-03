@@ -40,6 +40,16 @@ const fieldValidations = [
     errorMessage: "",
     metric: "",
   },
+  {
+    name: "Regex",
+    errorMessage: "",
+    metric: "",
+  },
+  {
+    name: "Length",
+    errorMessage: "",
+    metric: "",
+  },
 ];
 
 type TModelProps = {
@@ -52,19 +62,19 @@ type TValidationBoxProps = {
   validation: TValidation;
   updateValidation: (val: TValidation) => void;
   removeValidation: () => void;
+  inputType: string;
 };
 
 const ValidationBox = ({
   validation,
   updateValidation,
+  inputType,
   removeValidation,
 }: TValidationBoxProps) => {
   const { name, errorMessage, metric } = validation;
   const [metricState, setMetric] = useState(metric);
   const [errorMsg, setErrorMsg] = useState(errorMessage);
 
-  const inputType =
-    name === "Minimum length" || name === "Maximum length" ? "number" : "text";
   return (
     <div className="grid w-full items-center gap-2 relative">
       <Label className="text-neutral-600" htmlFor="max">
@@ -102,7 +112,7 @@ const ValidationBox = ({
           </Collapsible.CollapsibleTrigger>
           <Collapsible.CollapsibleContent className="pt-2">
             <Textarea
-              placeholder="Enter minlength error message"
+              placeholder="Enter error message"
               value={errorMsg}
               onChange={(e) => {
                 setErrorMsg(e.target.value);
@@ -331,6 +341,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
               key={index}
               updateValidation={setValidations}
               validation={validation}
+              inputType={inputType}
               removeValidation={() => setValidations(validation)}
             />
           ))}
