@@ -132,7 +132,9 @@ import {
   const formatProp = (val: string) => val.toLowerCase().split(" ").join("");
 
   const getZodValidation = (prop: TProperty) => {
-    const dataType = prop.type.includes("number") ? "string().transform((value)=>parseInt(value, 10))" : "string()";
+    const numberType =
+      prop.type.includes("number") && "transform((value)=>parseInt(value, 10))";
+    let dataType = "string()";
     let minLength = "";
     let maxLength = "";
     let email = prop.type.includes("email") ? "email()" : "";
@@ -177,8 +179,8 @@ import {
       endsWith,
       length,
       regex,
+      numberType,
     ].filter(Boolean);
-
 
     return `${formatProp(prop.label)}: z.${validations.join("\n        .")}`;
   };

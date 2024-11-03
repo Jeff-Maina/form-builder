@@ -18,23 +18,13 @@ import {
 
 const formSchema = z
   .object({
-    firstname: z.string().min(2),
-    lastname: z.string().min(2),
-    emailaddress: z.string().email(),
-    age: z.string().transform((value) => parseInt(value, 10)),
-    password: z
+    numberinput: z
       .string()
-      .regex(
-        new RegExp("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"),
-        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number."
-      ),
+      .includes("254")
+      .transform((value) => parseInt(value, 10)),
   })
   .required({
-    firstname: true,
-    lastname: true,
-    emailaddress: true,
-    age: true,
-    password: true,
+    numberinput: true,
   });
 
 export default function FormComponent() {
@@ -52,80 +42,14 @@ export default function FormComponent() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="firstname"
+          name="numberinput"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Firstname</FormLabel>
+              <FormLabel>Number Input</FormLabel>
               <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Enter your firstname"
-                  {...field}
-                />
+                <Input type="number" placeholder="Placeholder" {...field} />
               </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="lastname"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Lastname</FormLabel>
-              <FormControl>
-                <Input type="text" placeholder="Enter last name" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="emailaddress"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email Address</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="Enter your email address"
-                  {...field}
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="age"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Age</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="Enter your age" {...field} />
-              </FormControl>
-              <FormDescription>
-                This will be shown on your public profile
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="Placeholder" {...field} />
-              </FormControl>
-
+              <FormDescription>This is a description message</FormDescription>
               <FormMessage />
             </FormItem>
           )}
