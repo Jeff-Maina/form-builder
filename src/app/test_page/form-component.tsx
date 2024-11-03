@@ -18,13 +18,10 @@ import {
 
 const formSchema = z
   .object({
-    numberinput: z
-      .string()
-      .includes("254")
-      .transform((value) => parseInt(value, 10)),
+    age: z.coerce.number().gt(18).multipleOf(5),
   })
   .required({
-    numberinput: true,
+    age: true,
   });
 
 export default function FormComponent() {
@@ -42,14 +39,14 @@ export default function FormComponent() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="numberinput"
+          name="age"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Number Input</FormLabel>
+              <FormLabel>Age</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Placeholder" {...field} />
+                <Input type="number" placeholder="Enter age" {...field} />
               </FormControl>
-              <FormDescription>This is a description message</FormDescription>
+
               <FormMessage />
             </FormItem>
           )}

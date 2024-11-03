@@ -132,57 +132,64 @@ import {
   const formatProp = (val: string) => val.toLowerCase().split(" ").join("");
 
   const getZodValidation = (prop: TProperty) => {
-    const numberType =
-      prop.type.includes("number") && "transform((value)=>parseInt(value, 10))";
-    let dataType = "string()";
-    let minLength = "";
-    let maxLength = "";
-    let email = prop.type.includes("email") ? "email()" : "";
-    let contains = "";
-    let endsWith = "";
-    let length = "";
-    let regex = "";
+    let isNumberType = prop.type.includes("number");
+    const validations: string[] = [];
 
-    const getValidations = prop.validations?.map((validation) => {
-      const { name, metric, errorMessage = "Invalid input" } = validation;
-      const messageOption = errorMessage
-        ? `, { message: "${errorMessage.trim()}" }`
-        : "";
+    validations.push(isNumberType ? "z.coerce.number()" : "z.string()");
 
-      if (name === "Minimum length") {
-        minLength = `min(${metric}${messageOption})`;
-      }
-      if (name === "Maximum length") {
-        maxLength = `max(${metric}${messageOption})`;
-      }
-      if (name === "Contains") {
-        contains = `includes("${metric}"${messageOption})`;
-      }
-      if (name === "Ends with") {
-        endsWith = `endsWith("${metric}"${messageOption})`;
-      }
-      if (name === "Length") {
-        length = `length(${metric}${messageOption})`;
-      }
-      if (name === "Regex") {
-        regex = `regex(new RegExp("${metric})${messageOption}"))`;
-      }
-      return "";
-    });
+    if (prop.type.includes("email")) {
+      validations.push("z.email()");
+    }
 
-    const validations = [
-      dataType,
-      email,
-      minLength,
-      maxLength,
-      contains,
-      endsWith,
-      length,
-      regex,
-      numberType,
-    ].filter(Boolean);
+    prop.validations?.forEach(
+      ({ name, metric, errorMessage = "Invalid input" }) => {
+        const messageOption = errorMessage
+          ? `, { message: "${errorMessage.trim()}" }`
+          : "";
 
-    return `${formatProp(prop.label)}: z.${validations.join("\n        .")}`;
+        switch (name) {
+          case "Minimum length":
+            validations.push(`min(${metric}${messageOption})`);
+            break;
+          case "Maximum length":
+            validations.push(`max(${metric}${messageOption})`);
+            break;
+          case "Contains":
+            validations.push(`includes("${metric}"${messageOption})`);
+            break;
+          case "Ends with":
+            validations.push(`endsWith("${metric}"${messageOption})`);
+            break;
+          case "Length":
+            validations.push(`length(${metric}${messageOption})`);
+            break;
+          case "Regex":
+            validations.push(`regex(new RegExp("${metric}")${messageOption})`);
+            break;
+          case "Greater than":
+            validations.push(`gt(${metric}${messageOption})`);
+            break;
+          case "Greater than or equal to":
+            validations.push(`gte(${metric}${messageOption})`);
+            break;
+          case "Less than":
+            validations.push(`lt(${metric}${messageOption})`);
+            break;
+          case "Less than or equal to":
+            validations.push(`lte(${metric}${messageOption})`);
+            break;
+          case "Multiple of":
+            validations.push(`multipleOf(${metric}${messageOption})`);
+            break;
+          default:
+            break;
+        }
+      }
+    );
+
+    const validationChain = validations.join("\n        .");
+
+    return `${formatProp(prop.label)}: ${validationChain}`;
   };
 
   const validations = FormProperties.map((prop) => getZodValidation(prop));

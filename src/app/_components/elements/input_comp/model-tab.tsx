@@ -16,10 +16,11 @@ import { TProperty, TValidation } from "@/app/types";
 import { TFieldFunctions } from "./type";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Info, Trash } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import HoverCardWrapper from "../../hovercard-wrapper";
 
-const fieldValidations = [
+const textFieldValidations = [
   {
     name: "Minimum length",
     errorMessage: "",
@@ -47,6 +48,34 @@ const fieldValidations = [
   },
   {
     name: "Length",
+    errorMessage: "",
+    metric: "",
+  },
+];
+
+const numberFieldValidations = [
+  {
+    name: "Greater than",
+    errorMessage: "",
+    metric: "",
+  },
+  {
+    name: "Greater than or equal to",
+    errorMessage: "",
+    metric: "",
+  },
+  {
+    name: "Less than",
+    errorMessage: "",
+    metric: "",
+  },
+  {
+    name: "Less than or equal to",
+    errorMessage: "",
+    metric: "",
+  },
+  {
+    name: "Multiple of",
     errorMessage: "",
     metric: "",
   },
@@ -106,10 +135,12 @@ const ValidationBox = ({
       </div>
       <div>
         <Collapsible.Collapsible>
-          <Collapsible.CollapsibleTrigger className="text-xs text-red-500 font-medium flex items-center gap-3">
-            {name} error message
-            <CaretSortIcon />
-          </Collapsible.CollapsibleTrigger>
+          <div className="flex items-center gap-2">
+            <Collapsible.CollapsibleTrigger className="text-xs text-red-500 font-medium flex items-center gap-3">
+              {name} error message
+              <CaretSortIcon />
+            </Collapsible.CollapsibleTrigger>
+          </div>
           <Collapsible.CollapsibleContent className="pt-2">
             <Textarea
               placeholder="Enter error message"
@@ -152,6 +183,10 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
     disabled,
     inputType,
   } = FieldProperties;
+  
+  const activeValidations = inputType.includes("number")
+    ? numberFieldValidations
+    : textFieldValidations;
 
   return (
     <div className="flex flex-col pt-6">
@@ -302,8 +337,28 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
           </div>
 
           {/* Advanced validations */}
-
-          <h1 className="font-semibold">Advanced validations</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="font-semibold">Advanced validations</h1>
+            <HoverCardWrapper
+              description={
+                <small>
+                  If you do not provide a custom error message, Zod's default
+                  error will be used. Refer to{" "}
+                  <a
+                    href="https://zod.dev/ERROR_HANDLING"
+                    className="text-blue-500 underline"
+                  >
+                    Zod's docs
+                  </a>{" "}
+                  for default error values.
+                </small>
+              }
+              side="top"
+              className="p-3 leading-tight"
+            >
+              <Info size={13} />
+            </HoverCardWrapper>
+          </div>
 
           <DropdownMenu.DropdownMenu>
             <DropdownMenu.DropdownMenuTrigger asChild>
@@ -316,7 +371,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
               align="end"
               className="w-[300px]"
             >
-              {fieldValidations.map((val, index) => (
+              {activeValidations.map((val, index) => (
                 <div
                   className="p-2 flex items-center gap-2 hover:bg-neutral-100 "
                   key={index}
