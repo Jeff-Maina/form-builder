@@ -18,10 +18,10 @@ import {
 
 const formSchema = z
   .object({
-    age: z.coerce.number().gt(18).multipleOf(5),
+    urlinput: z.string().url(),
   })
   .required({
-    age: true,
+    urlinput: true,
   });
 
 export default function FormComponent() {
@@ -39,14 +39,14 @@ export default function FormComponent() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="age"
+          name="urlinput"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Age</FormLabel>
+              <FormLabel>Url Input</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Enter age" {...field} />
+                <Input type="url" placeholder="Placeholder" {...field} />
               </FormControl>
-
+              <FormDescription>This is a description message</FormDescription>
               <FormMessage />
             </FormItem>
           )}

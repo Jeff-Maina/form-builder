@@ -138,7 +138,11 @@ import {
     validations.push(isNumberType ? "z.coerce.number()" : "z.string()");
 
     if (prop.type.includes("email")) {
-      validations.push("z.email()");
+      validations.push("email()");
+    }
+    
+    if (prop.type.includes("url")) {
+      validations.push("url()");
     }
 
     prop.validations?.forEach(
