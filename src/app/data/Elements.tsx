@@ -95,7 +95,7 @@ export const elements: TElement[] = [
     label: "Checkbox",
     icon: <CircleCheck size={16} />,
     type: "checkbox",
-    completed: false,
+    completed: true,
   },
   {
     label: "Linebreak",

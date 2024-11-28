@@ -11,8 +11,16 @@ import FormPreview from "./_components/preview-box/form-preview";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Pencil } from "lucide-react";
+import { Eye, EyeOff, PanelRight, Pencil } from "lucide-react";
 import TooltipWrapper from "./_components/tooltip-wrapper";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function Home() {
   const onDragEnd = useCallback(() => {
@@ -76,8 +84,21 @@ export default function Home() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="pl-10 w-full lg:h-screen grid grid-cols-7 bg-grid">
-        <div className="col-span-1 p-3 px-0">
+      <div className="px-4 py-2 border">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant={"ghost"} size={"sm"}>
+              <PanelRight size={16} />
+              Elements
+            </Button>
+          </SheetTrigger>
+          <SheetContent className="bg-white " side="left">
+            <Sidebar addProperty={addProperty} />
+          </SheetContent>
+        </Sheet>
+      </div>
+      <div className="lg:pl-10 w-full lg:h-screen grid grid-cols-6 lg:grid-cols-7 bg-grid">
+        <div className="col-span-1 p-3 px-0 hidden lg:block">
           <Sidebar addProperty={addProperty} />
         </div>
 

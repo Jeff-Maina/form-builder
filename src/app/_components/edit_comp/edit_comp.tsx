@@ -27,11 +27,11 @@ const EditComp = ({
       )}
     >
       {children}
-      <div className="absolute bottom-0 right-0 p-2 flex items-center opacity-0 transition-all group-hover/card:opacity-100 ">
+      <div className="absolute bottom-0 right-0 lg:p-2 p-0 flex items-center opacity-0 transition-all group-hover/card:opacity-100 ">
         <Button
           className="text-neutral-400 hover:text-neutral-800 transition-all"
           variant={"ghost"}
-          size={"sm"}
+          size={"icon"}
           onClick={() => setSheetOpen(true)}
         >
           <Edit size={16} />
@@ -40,7 +40,7 @@ const EditComp = ({
           onClick={() => deleteField(id)}
           className="text-neutral-400 hover:text-neutral-800 transition-all"
           variant={"ghost"}
-          size={"sm"}
+          size={"icon"}
         >
           <Trash size={16} />
         </Button>{" "}
