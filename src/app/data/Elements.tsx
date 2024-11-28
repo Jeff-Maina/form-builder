@@ -65,7 +65,7 @@ export const elements: TElement[] = [
     label: "Textbox",
     icon: <BoxSelect size={16} />,
     type: "text_box",
-    completed: false,
+    completed: true,
   },
   {
     label: "Date picker",

@@ -3,9 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
-import { Input } from "@/components/ui/input";
-
 import {
   Form,
   FormControl,
@@ -18,17 +15,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
         
+
+import { Input } from "@/components/ui/input";
+
 const formSchema = z
   .object({
+      checkbox: z.boolean(),
       age: z.coerce.number(),
       urlinput: z.string()
-        .url(),
-      checkbox: z.boolean()
+        .url()
   })
   .required({
+      checkbox: true,
       age: true,
-      urlinput: true,
-      checkbox: true
+      urlinput: true
   })
 
 export default function FormComponent() {
@@ -46,11 +46,32 @@ export default function FormComponent() {
   return (
     <div className='max-w-lg rounded-md border p-4 flex flex-col gap-6'>
       <header className='flex flex-col gap-2'>
-        <h1 className="text-xl font-bold tracking-tight">Enter form's title</h1>
-        <p className="text-sm text-neutral-500">This is a placeholder for the form's description </p>
+        <h1 className="text-xl font-bold tracking-tight">Registration form</h1>
+        <p className="text-sm text-neutral-500">Enter your details to get started </p>
       </header>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="checkbox"
+            render={({ field }) => (
+              <FormItem
+                className="flex items-start space-x-3 space-y-0 rounded-md border p-4"
+              >
+                <FormControl>
+                  <Checkbox  checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <div className="grid gap-1.5 leading-none">
+                 <FormLabel>
+                    Checkbox
+                    <span className="ml-1 text-red-500">*</span>
+                  </FormLabel>
+                  <FormDescription>This is a description message</FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="age"
@@ -78,27 +99,6 @@ export default function FormComponent() {
                   This is a description message
                 </FormDescription>
                 <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="checkbox"
-            render={({ field }) => (
-              <FormItem
-                className="flex items-start space-x-3 space-y-0 rounded-md border p-4"
-              >
-                <FormControl>
-                  <Checkbox  checked={field.value} onCheckedChange={field.onChange} />
-                </FormControl>
-                <div className="grid gap-1.5 leading-none">
-                 <FormLabel>
-                    Checkbox
-                    <span className="ml-1 text-red-500">*</span>
-                  </FormLabel>
-                  <FormDescription>This is a description message</FormDescription>
-                  <FormMessage />
-                </div>
               </FormItem>
             )}
           />
