@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 
 // helpers
 const formatProp = (val: string) => val.toLowerCase().split(" ").join("");
@@ -27,9 +29,15 @@ function generateZodSchema(formItems: TProperty[]) {
     const inputName = `${formatProp(item.label)}-${item.id}`;
     const inputType = item.type;
     // Determine the base schema based on field type
-    let fieldSchema = inputType.includes("number")
-      ? z.coerce.number()
-      : z.string();
+    let fieldSchema: any;
+
+    if (item.type === "checkbox") {
+      fieldSchema = z.boolean();
+    } else if (inputType.includes("number")) {
+      fieldSchema = z.coerce.number();
+    } else {
+      fieldSchema = z.string();
+    }
 
     // Apply validations based on TValidation
     item.validations?.forEach((rule) => {
@@ -116,6 +124,67 @@ const FormPreview = ({
     console.log(values);
   }
 
+  function getFormItem(prop: TProperty, field: any) {
+    const typeMap: Record<string, string> = {
+      password_input: "password",
+      text_input: "text",
+      number_input: "number",
+      email_input: "email",
+      url_input: "url",
+    };
+
+    if (prop.type.includes("input")) {
+      return (
+        <FormItem key={prop.id}>
+          {!prop.isLabelHidden && (
+            <FormLabel>
+              {prop.label}{" "}
+              {prop.required && <span className="text-red-500">*</span>}
+            </FormLabel>
+          )}
+          <FormControl>
+            <Input
+              type={typeMap[prop.type]}
+              placeholder={prop.placeholder}
+              {...field}
+            />
+          </FormControl>
+          {!prop.isDescriptionHidden && (
+            <FormDescription>{prop.description}</FormDescription>
+          )}{" "}
+          <FormMessage />
+        </FormItem>
+      );
+    }
+
+    if (prop.type == "checkbox") {
+      return (
+        <FormItem
+          key={prop.id}
+          className="flex  items-start space-x-3 space-y-0 rounded-md border p-4"
+        >
+          <FormControl>
+            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+          </FormControl>
+
+          <div className="flex flex-col h-full justify-center gap-1.5 leading-none">
+            <FormLabel
+              className={cn(prop.isDescriptionHidden && "translate-y-[2px]")}
+            >
+              {prop.label}
+              {prop.required && <span className="ml-1 text-red-500">*</span>}
+            </FormLabel>
+            {!prop.isDescriptionHidden && (
+              <FormDescription>{prop.description}</FormDescription>
+            )}{" "}
+            <FormMessage />
+          </div>
+        </FormItem>
+      );
+    }
+
+    return <div></div>;
+  }
   return (
     <ScrollArea className="max-h-[90vh] flex flex-col py-4 pr-4 overflow-x-auto">
       <div className=" bg-white border py-4 min-h-96 max-w-lg rounded-md !mx-auto flex flex-col gap-6">
@@ -135,43 +204,12 @@ const FormPreview = ({
             >
               {properties.map((prop, index) => {
                 const name = `${formatProp(prop.label)}-${prop.id}`;
-
-                const typeMap: Record<string, string> = {
-                  password_input: "password",
-                  text_input: "text",
-                  number_input: "number",
-                  email_input: "email",
-                  url_input: "url",
-                };
-
                 return (
                   <FormField
                     key={prop.id}
                     control={form.control}
                     name={name}
-                    render={({ field }) => (
-                      <FormItem>
-                        {!prop.isLabelHidden && (
-                          <FormLabel>
-                            {prop.label}{" "}
-                            {prop.required && (
-                              <span className="text-red-500">*</span>
-                            )}
-                          </FormLabel>
-                        )}
-                        <FormControl>
-                          <Input
-                            type={typeMap[prop.type]}
-                            placeholder={prop.placeholder}
-                            {...field}
-                          />
-                        </FormControl>
-                        {!prop.isDescriptionHidden && (
-                          <FormDescription>{prop.description}</FormDescription>
-                        )}{" "}
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    render={({ field }) => getFormItem(prop, field)}
                   />
                 );
               })}

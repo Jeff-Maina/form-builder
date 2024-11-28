@@ -61,8 +61,10 @@ const getSourceCode = (formData: TFormData) => {
       if (prop.type.includes("input")) {
         return `
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
+`;
+      } else {
+        const primitives = element.primitives.join(", ");
+        return `import {
   Form,
   FormControl,
   FormDescription,
@@ -71,10 +73,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-`;
-      } else {
-        const primitives = element.primitives.join(", ");
-        return `import { ${primitives} } from "@/components/ui/${element.component}";`;
+import { Button } from "@/components/ui/button";
+import { ${primitives} } from "@/components/ui/${element.component}";
+        `;
       }
     })
   )
@@ -85,29 +86,66 @@ import {
     FormProperties.map((prop) => {
       const name = prop.label.toLowerCase().split(" ").join("");
 
-      return `
-        <FormField
-          control={form.control}
-          name="${name}"
-          render={({ field }) => (
-            <FormItem>
-             ${prop.isLabelHidden ? "" : `<FormLabel>${prop.label}</FormLabel>`}
-              <FormControl>
-                <Input type='${prop.type.split("_")[0]}' placeholder="${
-        prop.placeholder
-      }" {...field} />
-              </FormControl>
-            ${
-              prop.isDescriptionHidden
-                ? ""
-                : `  <FormDescription>
-                ${prop.description}
-              </FormDescription>`
-            }
-              <FormMessage />
-            </FormItem>
-          )}
-        />`;
+      if (prop.type.includes("input")) {
+        return `
+          <FormField
+            control={form.control}
+            name="${name}"
+            render={({ field }) => (
+              <FormItem>
+               ${
+                 prop.isLabelHidden
+                   ? ""
+                   : `<FormLabel>${prop.label}</FormLabel>`
+               }
+                <FormControl>
+                  <Input type='${prop.type.split("_")[0]}' placeholder="${
+          prop.placeholder
+        }" {...field} />
+                </FormControl>
+              ${
+                prop.isDescriptionHidden
+                  ? ""
+                  : `  <FormDescription>
+                  ${prop.description}
+                </FormDescription>`
+              }
+                <FormMessage />
+              </FormItem>
+            )}
+          />`;
+      }
+      if (prop.type === "checkbox") {
+        return `
+          <FormField
+            control={form.control}
+            name="${name}"
+            render={({ field }) => (
+              <FormItem
+                className="flex items-start space-x-3 space-y-0 rounded-md border p-4"
+              >
+                <FormControl>
+                  <Checkbox  checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <div className="grid gap-1.5 leading-none">
+                 ${
+                   prop.isLabelHidden
+                     ? ""
+                     : `<FormLabel>
+                    ${prop.label}
+                    ${
+                      prop.required &&
+                      `<span className="ml-1 text-red-500">*</span>`
+                    }
+                  </FormLabel>`
+                 }
+                  <FormDescription>${prop.description}</FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />`;
+      }
     })
       .join("")
       .trim();
@@ -118,7 +156,12 @@ import {
     let isNumberType = prop.type.includes("number");
     const validations: string[] = [];
 
-    validations.push(isNumberType ? "z.coerce.number()" : "z.string()");
+    if (prop.type !== "checkbox") {
+      validations.push(isNumberType ? "z.coerce.number()" : "z.string()");
+    }else{
+      validations.push("z.boolean()");
+
+    }
 
     if (prop.type.includes("email")) {
       validations.push("email()");
@@ -195,9 +238,17 @@ import {
   const defaultValues = removeDuplicates(
     FormProperties.filter((prop) => prop.defaultValue !== "").map((prop) => {
       const name = prop.label.toLowerCase().split(" ").join("");
-      const defaultValue = prop.type.includes("number")
-        ? prop.defaultValue
-        : `"${prop.defaultValue}"`;
+
+      let defaultValue;
+
+      if (prop.type.includes("number")) {
+        defaultValue = prop.defaultValue;
+      } else if (prop.type === "checkbox") {
+        defaultValue = `${prop.defaultValue}`.toLowerCase() === "true";
+      } else {
+        defaultValue = `"${prop.defaultValue}"`;
+      }
+
       return ` ${name}: ${defaultValue}`;
     })
   ).join(";\n      ");
@@ -219,8 +270,14 @@ export default function FormComponent() {
   return (
     <div className='max-w-lg rounded-md border p-4 flex flex-col gap-6'>
       <header className='flex flex-col gap-2'>
-        ${!formData.hideTitle && `<h1 className="text-xl font-bold tracking-tight">${formData.title}</h1>` }
-        ${!formData.hideDescription && `<p className="text-sm text-neutral-500">${formData.description} </p>` }
+        ${
+          !formData.hideTitle &&
+          `<h1 className="text-xl font-bold tracking-tight">${formData.title}</h1>`
+        }
+        ${
+          !formData.hideDescription &&
+          `<p className="text-sm text-neutral-500">${formData.description} </p>`
+        }
       </header>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

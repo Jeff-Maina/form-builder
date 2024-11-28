@@ -199,7 +199,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
         {/* property switches */}
         <div className="flex flex-col gap-2">
           <div className="p-3 border rounded-md flex items-center justify-between">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <p className="text-sm font-medium">Hide label</p>
               <p className="text-xs text-neutral-600">
                 Hide the field's label.
@@ -219,7 +219,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
           </div>
 
           <div className="p-3 border rounded-md flex items-center justify-between">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <p className="text-sm font-medium">Hide description message</p>
               <p className="text-xs text-neutral-600">
                 Hide the field's description message.
@@ -238,7 +238,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
             </div>
           </div>
           <div className="p-3 border rounded-md flex items-center justify-between">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
               <p className="text-sm font-medium">Disable input</p>
               <p className="text-xs text-neutral-600">
                 Disable the field and make it inaccessible.
@@ -322,7 +322,7 @@ const ModelTab = ({ FieldFunctions, FieldProperties }: TModelProps) => {
           {/* required button */}
           <div className="grid gap-2">
             <div className="p-3 border rounded-md flex items-center justify-between">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 <p className="text-sm font-medium">Field is required</p>
                 <p className="text-xs text-neutral-600">
                   {" "}

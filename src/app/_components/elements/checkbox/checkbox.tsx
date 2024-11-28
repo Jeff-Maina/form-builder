@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type SheetProps = {
   isSheetOpen: boolean;
@@ -81,7 +82,7 @@ const CheckBoxSheet = ({
                   </div>
 
                   <div className="p-3 border rounded-md flex items-center justify-between">
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1">
                       <p className="text-sm font-medium">
                         Hide description message
                       </p>
@@ -102,7 +103,7 @@ const CheckBoxSheet = ({
                     </div>
                   </div>
                   <div className="p-3 border rounded-md flex items-center justify-between">
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1">
                       <p className="text-sm font-medium">Disable checkbox</p>
                       <p className="text-xs text-neutral-600">
                         Disable the field and make it inaccessible.
@@ -159,7 +160,7 @@ const CheckBoxSheet = ({
 
                 <div className="grid gap-2">
                   <div className="p-3 border rounded-md flex items-center justify-between">
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1">
                       <p className="text-sm font-medium">Field is required</p>
                       <p className="text-xs text-neutral-600">
                         {" "}
@@ -273,7 +274,7 @@ const CheckboxComp = ({
             {!isLabelHidden && (
               <label
                 htmlFor={`checkbox-${item.id}`}
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className={cn("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70", isDescriptionHidden && "translate-y-[1px]")}
               >
                 {label}
                 {isRequired ? <span className="text-red-500 ml-1">*</span> : null}
