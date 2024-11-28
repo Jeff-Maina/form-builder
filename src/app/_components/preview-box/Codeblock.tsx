@@ -38,6 +38,14 @@ const Codeblock = ({ formCode, lang }: { formCode: string; lang: string }) => {
     );
   }
 
+  const copyCode = () => {
+    navigator.clipboard.writeText(formCode);
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  };
+
   return (
     <div className="relative">
       <TooltipWrapper
@@ -46,12 +54,7 @@ const Codeblock = ({ formCode, lang }: { formCode: string; lang: string }) => {
         sideOffset={10}
       >
         <Button
-          onClick={() => {
-            setIsCopied(true);
-            setTimeout(() => {
-              setIsCopied(false);
-            }, 1000);
-          }}
+          onClick={copyCode}
           className="absolute top-6 right-8 size-7 rounded bg-[#262626] text-neutral-400 border border-neutral-700 hover:text-white"
           size={"icon"}
         >
@@ -71,3 +74,5 @@ const Codeblock = ({ formCode, lang }: { formCode: string; lang: string }) => {
 };
 
 export default Codeblock;
+
+

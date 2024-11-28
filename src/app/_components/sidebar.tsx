@@ -45,10 +45,10 @@ const Sidebar = ({ addProperty }: TSidebarProps) => {
 
   return (
     <>
-      <aside className="w-full h-full rounded-md pt-10 ">
-        <div className="sticky top-14">
+      <aside className="w-full h-full rounded-md">
+        <div className="sticky top-4">
           <div className="flex flex-col gap-1">
-            <h1 className="font-medium mb-7">Elements</h1>
+            <h1 className="font-medium">Elements</h1>
             {elements.map((element, index) => {
               return (
                 <button

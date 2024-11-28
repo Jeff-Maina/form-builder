@@ -76,12 +76,12 @@ export default function Home() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className=" max-w-[110rem] m-auto w-full lg:h-screen grid grid-cols-5 bg-grid">
-        <div className=" col-span-1 p-3 px-0">
+      <div className="pl-10 w-full lg:h-screen grid grid-cols-7 bg-grid">
+        <div className="col-span-1 p-3 px-0">
           <Sidebar addProperty={addProperty} />
         </div>
 
-        <div className="h-screen col-span-2 flex flex-col gap-3 p-3">
+        <div className="h-screen col-span-3 flex flex-col gap-3 p-3">
           <div className="p-4 border rounded-md">
             <div className="flex flex-col">
               <div className="relative flex items-center justify-between gap-2">
@@ -168,7 +168,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="h-screen col-span-2 p-3 px-0">
+        <div className="h-screen col-span-3 p-3 px-0">
           <Previewbox formData={formData}>
             <FormPreview
               formData={formData}
