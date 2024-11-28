@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
 // helpers
 const formatProp = (val: string) => val.toLowerCase().split(" ").join("");
@@ -45,7 +46,27 @@ function generateZodSchema(formItems: TProperty[]) {
         message: rule.errorMessage ? rule.errorMessage : undefined,
       };
 
-      if (inputType.includes("input") && !inputType.includes("number")) {
+      if (inputType.includes("number")) {
+        switch (rule.name) {
+          case "Greater than":
+            fieldSchema = fieldSchema.gt(rule.metric as number, options);
+            break;
+          case "Greater than or equal to":
+            fieldSchema = fieldSchema.gte(rule.metric as number, options);
+            break;
+          case "Less than":
+            fieldSchema = fieldSchema.lt(rule.metric as number, options);
+            break;
+          case "Less than or equal to":
+            fieldSchema = fieldSchema.lte(rule.metric as number, options);
+            break;
+          case "Multiple of":
+            fieldSchema = fieldSchema.multipleOf(rule.metric as number, options);
+            break;
+          default:
+            throw new Error("Unsupported validation type: " + rule.name);
+        }
+      } else if (inputType.includes("input") && !inputType.includes("number")) {
         switch (rule.name) {
           case "Minimum length":
             fieldSchema = fieldSchema.min(rule.metric as number, options);
@@ -108,6 +129,7 @@ const FormPreview = ({
 
   const [localProperties, setLocalProperties] = useState(formData.properties);
 
+
   const schema = generateZodSchema(formData.properties);
 
   useEffect(() => {
@@ -116,8 +138,19 @@ const FormPreview = ({
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {},
+    defaultValues: {}
   });
+
+  // useEffect(() => {
+  //   form.reset(
+  //     localProperties.reduce((acc, prop) => {
+  //       return {
+  //         ...acc,
+  //         [`${formatProp(prop.label)}-${prop.id}`]: prop.defaultValue || "",
+  //       };
+  //     }, {})
+  //   );
+  // }, [localProperties, form]);
 
   function onSubmit(values: z.infer<typeof schema>) {
     console.log(properties);
@@ -179,6 +212,26 @@ const FormPreview = ({
             )}{" "}
             <FormMessage />
           </div>
+        </FormItem>
+      );
+    }
+
+    if (prop.type == "text_box") {
+      return (
+        <FormItem key={prop.id}>
+          {!prop.isLabelHidden && (
+            <FormLabel>
+              {prop.label}{" "}
+              {prop.required && <span className="text-red-500">*</span>}
+            </FormLabel>
+          )}
+          <FormControl>
+            <Textarea placeholder={prop.placeholder} {...field}/>
+          </FormControl>
+          {!prop.isDescriptionHidden && (
+            <FormDescription>{prop.description}</FormDescription>
+          )}{" "}
+          <FormMessage />
         </FormItem>
       );
     }

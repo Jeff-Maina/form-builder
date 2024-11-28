@@ -299,7 +299,7 @@ const TextboxComp = ({
         setSheetOpen={setSheetOpen}
         isPreview={false}
       >
-        <div className="grid w-full max-w-sm items-center gap-2 relative">
+        <div className="grid w-full max-w-sm items-center gap-2 relative mb-6">
           {!isLabelHidden && (
             <Label className="text-neutral-600">
               {label}

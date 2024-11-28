@@ -53,18 +53,9 @@ const getSourceCode = (formData: TFormData) => {
   const FormProperties = formData.properties;
 
   // Helper: Remove duplicate imports
-  const elementImports = removeDuplicates(
-    FormProperties.map((prop) => {
-      const element = formImports[prop.type];
-      if (prop.type === "linebreak") return "";
-
-      if (prop.type.includes("input")) {
-        return `
-import { Input } from "@/components/ui/input";
-`;
-      } else {
-        const primitives = element.primitives.join(", ");
-        return `import {
+  const elementImports = (() => {
+    const formComponentsImport = `
+import {
   Form,
   FormControl,
   FormDescription,
@@ -73,14 +64,29 @@ import { Input } from "@/components/ui/input";
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { ${primitives} } from "@/components/ui/${element.component}";
-        `;
+import { Button } from "@/components/ui/button";`;
+
+    const primitiveImports = FormProperties.map((prop) => {
+      const element = formImports[prop.type];
+      if (prop.type === "linebreak") return "";
+
+      if (prop.type.includes("input")) {
+        return `import { Input } from "@/components/ui/input";`;
       }
-    })
-  )
-    .filter(Boolean)
-    .join("\n");
+      if (prop.type === "text_box") {
+        return `import { Textarea } from "@/components/ui/textarea";`;
+      }
+      if (prop.type === "checkbox") {
+        return `import { Checkbox } from "@/components/ui/checkbox";`;
+      }
+    });
+
+    const uniqueImports = removeDuplicates(primitiveImports)
+      .filter(Boolean)
+      .join("\n");
+
+    return [formComponentsImport, uniqueImports].join("\n");
+  })();
 
   const generateFormFields = () =>
     FormProperties.map((prop) => {
@@ -146,6 +152,32 @@ import { ${primitives} } from "@/components/ui/${element.component}";
             )}
           />`;
       }
+      if (prop.type === "text_box") {
+        return `
+        <FormField
+          control={form.control}
+          name="${name}"
+          render={({ field }) => (
+            <FormItem >
+            ${
+              !prop.isLabelHidden &&
+              `<FormLabel>
+                ${prop.label}
+                ${prop.required && `<span className="text-red-500">*</span>`}
+              </FormLabel>`
+            }
+            <FormControl>
+              <Textarea placeholder="${prop.placeholder}" {...field}/>
+            </FormControl>
+            ${
+              !prop.isDescriptionHidden &&
+              `<FormDescription>${prop.description}</FormDescription>`
+            }{" "}
+            <FormMessage />
+          </FormItem>
+          )}
+        />`;
+      }
     })
       .join("")
       .trim();
@@ -158,9 +190,8 @@ import { ${primitives} } from "@/components/ui/${element.component}";
 
     if (prop.type !== "checkbox") {
       validations.push(isNumberType ? "z.coerce.number()" : "z.string()");
-    }else{
+    } else {
       validations.push("z.boolean()");
-
     }
 
     if (prop.type.includes("email")) {
@@ -225,7 +256,8 @@ import { ${primitives} } from "@/components/ui/${element.component}";
   const validations = FormProperties.map((prop) => getZodValidation(prop));
   const requiredFields = FormProperties.filter((prop) => prop.required);
 
-  const formSchema = `const formSchema = z
+  const formSchema = `
+const formSchema = z
   .object({
       ${validations.join(",\n      ")}
   })
@@ -251,7 +283,7 @@ import { ${primitives} } from "@/components/ui/${element.component}";
 
       return ` ${name}: ${defaultValue}`;
     })
-  ).join(";\n      ");
+  ).join(",\n      ");
 
   // Form component template
   const component = `
