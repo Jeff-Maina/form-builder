@@ -18,12 +18,13 @@ import {
 
 const formSchema = z
   .object({
-      numberinput: z.coerce.number(),
-      textinput: z.string()
+      password: z.string(),
+      websitelink: z.string()
+        .url()
   })
   .required({
-      numberinput: true,
-      textinput: true
+      password: true,
+      websitelink: true
   })
 
 export default function FormComponent() {
@@ -39,16 +40,21 @@ export default function FormComponent() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
+    <div className='max-w-lg rounded-md border p-4 flex flex-col gap-6'>
+      <header className='flex flex-col gap-2'>
+        <h1 className="text-xl font-bold tracking-tight">Registration form</h1>
+        <p className="text-sm text-neutral-500">Enter your details to get started </p>
+      </header>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
           control={form.control}
-          name="numberinput"
+          name="password"
           render={({ field }) => (
             <FormItem>
-             <FormLabel>Number Input</FormLabel>
+             <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type='number' placeholder="Placeholder" {...field} />
+                <Input type='password' placeholder="Enter password" {...field} />
               </FormControl>
             
               <FormMessage />
@@ -57,22 +63,21 @@ export default function FormComponent() {
         />
         <FormField
           control={form.control}
-          name="textinput"
+          name="websitelink"
           render={({ field }) => (
             <FormItem>
-             <FormLabel>Text Input</FormLabel>
+             <FormLabel>Website Link</FormLabel>
               <FormControl>
-                <Input type='text' placeholder="Placeholder" {...field} />
+                <Input type='url' placeholder="Enter website link" {...field} />
               </FormControl>
-              <FormDescription>
-                This is a description message
-              </FormDescription>
+            
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+          <Button type="submit">Submit</Button>
+        </form>
+      </Form>
+    </div>
   );
 }

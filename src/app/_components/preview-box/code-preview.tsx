@@ -1,22 +1,6 @@
-import { TFormData, TProperty, TValidation } from "@/app/types";
-import { useEffect, useState } from "react";
-import { createHighlighter } from "shiki";
+import { TFormData, TProperty } from "@/app/types";
+
 import Codeblock from "./Codeblock";
-
-import { z } from "zod";
-
-const formSchema = z
-  .object({
-    emailinput: z
-      .string()
-      .email()
-      .max(1000, { message: "maximum length" })
-      .includes("jeff", { message: "contains jeff" })
-      .endsWith(".com", { message: "ends with .com" }),
-  })
-  .required({
-    emailinput: true,
-  });
 
 type TCodePreviewProps = {
   formData: TFormData;
@@ -65,7 +49,6 @@ const formImports: Record<
   },
 };
 
-const FormFields = {};
 const getSourceCode = (formData: TFormData) => {
   const FormProperties = formData.properties;
 
@@ -140,7 +123,7 @@ import {
     if (prop.type.includes("email")) {
       validations.push("email()");
     }
-    
+
     if (prop.type.includes("url")) {
       validations.push("url()");
     }
@@ -234,12 +217,18 @@ export default function FormComponent() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        ${generateFormFields()}
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+    <div className='max-w-lg rounded-md border p-4 flex flex-col gap-6'>
+      <header className='flex flex-col gap-2'>
+        ${!formData.hideTitle && `<h1 className="text-xl font-bold tracking-tight">${formData.title}</h1>` }
+        ${!formData.hideDescription && `<p className="text-sm text-neutral-500">${formData.description} </p>` }
+      </header>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          ${generateFormFields()}
+          <Button type="submit">Submit</Button>
+        </form>
+      </Form>
+    </div>
   );
 }
 `;

@@ -44,17 +44,17 @@ const InputCompSheet = ({
             <Tabs.Tabs defaultValue="model" className="w-full">
               <Tabs.TabsList className="w-full b gap-3">
                 <Tabs.TabsTrigger
-                  className="w-2/4  data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
+                  className="w-full  data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
                   value="model"
                 >
                   Model
                 </Tabs.TabsTrigger>
-                <Tabs.TabsTrigger
+                {/* <Tabs.TabsTrigger
                   className="w-2/4  data-[state=active]:bg-white hover:bg-neutral-100 transition-all !text-neutral-800"
                   value="design"
                 >
                   Design
-                </Tabs.TabsTrigger>
+                </Tabs.TabsTrigger> */}
               </Tabs.TabsList>
 
               <Tabs.TabsContent value="model">
@@ -64,9 +64,9 @@ const InputCompSheet = ({
                   FieldProperties={FieldProperties}
                 />
               </Tabs.TabsContent>
-              <Tabs.TabsContent value="design">
+              {/* <Tabs.TabsContent value="design">
                 <DesignTab />
-              </Tabs.TabsContent>
+              </Tabs.TabsContent> */}
             </Tabs.Tabs>
 
             <Sheet.SheetFooter className="mt-4">
